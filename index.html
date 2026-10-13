@@ -1,0 +1,3631 @@
+<!doctype html>
+<html lang="id">
+     <head>
+          <meta charset="UTF-8" />
+          <meta
+               name="viewport"
+               content="width=device-width, initial-scale=1.0"
+          />
+          <title>Belajar Lingkaran & Usaha Rok Payung</title>
+          <style>
+               * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+               }
+               body {
+                    background: #1a2a3a;
+                    min-height: 100vh;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 20px;
+               }
+               .slide-container {
+                    width: 100%;
+                    max-width: 1100px;
+                    aspect-ratio: 16 / 9;
+                    background: #ffffff;
+                    border-radius: 24px;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+                    overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                    position: relative;
+               }
+               .slide-content {
+                    flex: 1;
+                    overflow-y: auto;
+                    padding: 16px 24px;
+                    scroll-behavior: smooth;
+               }
+               .slide-content::-webkit-scrollbar {
+                    width: 4px;
+               }
+               .slide-content::-webkit-scrollbar-track {
+                    background: #eef2f6;
+               }
+               .slide-content::-webkit-scrollbar-thumb {
+                    background: #0a2540;
+                    border-radius: 10px;
+               }
+               .slide {
+                    display: none;
+                    animation: fadeSlide 0.35s ease;
+               }
+               .slide.active {
+                    display: block;
+               }
+               @keyframes fadeSlide {
+                    0% {
+                         opacity: 0.3;
+                         transform: translateY(10px);
+                    }
+                    100% {
+                         opacity: 1;
+                         transform: translateY(0);
+                    }
+               }
+               .slide-nav {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 8px 24px;
+                    background: #f9fbfd;
+                    border-top: 1px solid #e6edf4;
+                    flex-shrink: 0;
+               }
+               .slide-nav .indicator {
+                    color: #4a6a8a;
+                    font-weight: 600;
+                    font-size: 0.8rem;
+               }
+               .slide-nav .indicator span {
+                    color: #0a2540;
+                    font-weight: 700;
+               }
+               .nav-btn {
+                    background: #0a2540;
+                    border: none;
+                    padding: 5px 18px;
+                    border-radius: 40px;
+                    color: #fff;
+                    font-weight: 600;
+                    font-size: 0.8rem;
+                    cursor: pointer;
+                    transition: 0.2s;
+               }
+               .nav-btn:hover {
+                    background: #1a3a5a;
+                    transform: scale(1.02);
+               }
+               .nav-btn:disabled {
+                    background: #b0c4d8;
+                    cursor: not-allowed;
+                    transform: none;
+               }
+               .nav-btn-secondary {
+                    background: #eef2f6;
+                    color: #0a2540;
+               }
+               .nav-btn-secondary:hover {
+                    background: #dce4ec;
+               }
+               .card {
+                    background: #f9fbfd;
+                    border-radius: 12px;
+                    padding: 12px 16px;
+                    margin-bottom: 10px;
+                    margin-top: 10px;
+                    border: 1px solid #e6edf4;
+               }
+               .card-title {
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: #0a2540;
+                    margin-bottom: 4px;
+               }
+               .card-sub {
+                    color: #1e3a5a;
+                    font-size: 0.85rem;
+                    line-height: 1.5;
+               }
+               .tujuan-box {
+                    background: #eaf2fa;
+                    border-radius: 8px;
+                    padding: 8px 14px;
+                    margin-bottom: 8px;
+                    border-left: 4px solid #f5b342;
+                    font-size: 0.82rem;
+                    color: #0a2540;
+               }
+               .tujuan-box strong {
+                    color: #0a2540;
+               }
+               .prinsip-box {
+                    display: flex;
+                    gap: 6px;
+                    flex-wrap: wrap;
+                    margin-bottom: 8px;
+               }
+               .prinsip-box span {
+                    background: #eef2f6;
+                    padding: 2px 10px;
+                    border-radius: 20px;
+                    font-size: 0.6rem;
+                    font-weight: 600;
+                    color: #0a2540;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+               }
+               .prinsip-box span.berkesadaran {
+                    background: #d4e6f1;
+               }
+               .prinsip-box span.bermakna {
+                    background: #fdebd0;
+               }
+               .prinsip-box span.menggembirakan {
+                    background: #d5f5e3;
+               }
+               .canvas-wrap {
+                    display: flex;
+                    justify-content: center;
+                    margin: 6px 0;
+                    background: #ffffff;
+                    border-radius: 10px;
+                    padding: 4px;
+                    border: 1px solid #e6edf4;
+               }
+               canvas {
+                    border-radius: 8px;
+                    max-width: 100%;
+                    height: auto;
+                    display: block;
+                    background: #ffffff;
+               }
+               .control-group {
+                    margin: 6px 0 4px;
+               }
+               .control-group label {
+                    display: flex;
+                    justify-content: space-between;
+                    color: #1a3a5a;
+                    font-weight: 500;
+                    font-size: 0.78rem;
+               }
+               .control-group label span {
+                    color: #0a2540;
+                    font-weight: 700;
+               }
+               input[type='range'] {
+                    width: 100%;
+                    height: 4px;
+                    -webkit-appearance: none;
+                    appearance: none;
+                    background: #d0dce8;
+                    border-radius: 10px;
+                    outline: none;
+               }
+               input[type='range']::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 14px;
+                    height: 14px;
+                    background: #0a2540;
+                    border-radius: 50%;
+                    cursor: pointer;
+               }
+               input[type='range']::-moz-range-thumb {
+                    width: 14px;
+                    height: 14px;
+                    background: #0a2540;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    border: none;
+               }
+               .info-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                    gap: 6px;
+                    margin: 6px 0;
+               }
+               .info-box {
+                    background: #ffffff;
+                    border-radius: 8px;
+                    padding: 6px 10px;
+                    text-align: center;
+                    border-left: 4px solid #0a2540;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+               }
+               .info-box .label {
+                    font-size: 0.6rem;
+                    color: #4a6a8a;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+               }
+               .info-box .value {
+                    font-size: 1.1rem;
+                    font-weight: 700;
+                    color: #0a2540;
+               }
+               .info-box .value small {
+                    font-size: 0.65rem;
+                    font-weight: 400;
+                    color: #4a6a8a;
+               }
+               .btn-group {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 4px;
+                    margin: 4px 0;
+                    justify-content: center;
+               }
+               .btn-mode {
+                    margin-top: 8px;
+                    margin-bottom: 8px;
+                    background: #f0f4f9;
+                    border: 2px solid transparent;
+                    padding: 3px 12px;
+                    border-radius: 40px;
+                    color: #1a3a5a;
+                    font-weight: 600;
+                    font-size: 0.8rem;
+                    cursor: pointer;
+                    transition: 0.2s;
+               }
+               .btn-mode:hover {
+                    background: #e2eaf2;
+               }
+               .btn-mode.active-mode {
+                    border-color: #0a2540;
+                    background: #0a2540;
+                    color: #fff;
+               }
+               .btn {
+                    background: #0a2540;
+                    border: none;
+                    padding: 5px 16px;
+                    border-radius: 40px;
+                    font-weight: 700;
+                    color: #fff;
+                    font-size: 0.78rem;
+                    cursor: pointer;
+                    transition: 0.2s;
+               }
+               .btn:hover {
+                    background: #1a3a5a;
+                    transform: scale(1.02);
+               }
+               .evaluation-box {
+                    background: #f0f7ff;
+                    border-radius: 10px;
+                    padding: 10px 14px;
+                    margin-top: 8px;
+                    margin-bottom: 8px;
+                    border: 1px dashed #0a2540;
+               }
+               .evaluation-box h3 {
+                    color: #0a2540;
+                    font-size: 0.8rem;
+                    margin-bottom: 3px;
+               }
+               .evaluation-box .soal {
+                    color: #1a3a5a;
+                    font-size: 0.82rem;
+                    line-height: 1.5;
+               }
+               .evaluation-box .answer-area {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 6px;
+                    align-items: center;
+                    margin-top: 6px;
+               }
+               .evaluation-box .answer-area input,
+               .evaluation-box .answer-area select {
+                    background: #ffffff;
+                    border: 1px solid #d0dce8;
+                    border-radius: 30px;
+                    padding: 3px 12px;
+                    color: #0a2540;
+                    font-size: 0.78rem;
+                    outline: none;
+               }
+               .feedback {
+                    margin-top: 6px;
+                    font-weight: 600;
+                    font-size: 0.78rem;
+               }
+               .feedback.correct {
+                    color: #0a7a3a;
+               }
+               .feedback.wrong {
+                    color: #b33;
+               }
+               .kesimpulan-box {
+                    background: #eaf2fa;
+                    border-radius: 8px;
+                    padding: 8px 12px;
+                    margin-top: 6px;
+                    border-left: 4px solid #f5b342;
+               }
+               .kesimpulan-box h4 {
+                    color: #0a2540;
+                    font-size: 0.8rem;
+               }
+               .kesimpulan-box p {
+                    color: #1a3a5a;
+                    font-size: 0.78rem;
+                    line-height: 1.5;
+               }
+               .cp-box {
+                    background: #eaf2fa;
+                    border-radius: 8px;
+                    padding: 8px 12px;
+                    margin-top: 50px;
+                    border-left: 4px solid #0a2540;
+               }
+               .cp-box h4 {
+                    color: #0a2540;
+                    font-size: 1.5 rem;
+                    margin-bottom: 2px;
+               }
+               .cp-box p {
+                    color: #1a3a5a;
+                    font-size: 0.78rem;
+                    line-height: 1.5;
+               }
+               .checkbox-group {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 4px;
+                    margin: 8px;
+               }
+               .checkbox-group label {
+                    display: flex;
+                    align-items: center;
+                    gap: 3px;
+                    font-size: 0.78rem;
+                    color: #1a3a5a;
+                    cursor: pointer;
+               }
+               .rekap-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 0.7rem;
+               }
+               .rekap-table th {
+                    background: #0a2540;
+                    color: #fff;
+                    padding: 4px 8px;
+                    text-align: left;
+               }
+               .rekap-table td {
+                    padding: 4px 8px;
+                    border-bottom: 1px solid #e6edf4;
+                    color: #1a3a5a;
+               }
+               .skor-total {
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                    text-align: center;
+                    padding: 6px;
+                    background: #f0f7ff;
+                    border-radius: 8px;
+                    margin: 6px 0;
+               }
+               .skor-total span {
+                    color: #f5b342;
+               }
+               .refleksi-box {
+                    background: #fef9e7;
+                    border-radius: 10px;
+                    padding: 10px 14px;
+                    margin-top: 8px;
+                    border: 1px solid #f5b342;
+               }
+               .refleksi-box h4 {
+                    color: #0a2540;
+                    font-size: 0.85rem;
+                    margin-bottom: 4px;
+               }
+               .refleksi-box p {
+                    color: #1a3a5a;
+                    font-size: 0.78rem;
+                    line-height: 1.6;
+               }
+               .refleksi-box .pertanyaan {
+                    font-style: italic;
+                    color: #0a2540;
+                    margin-top: 3px;
+               }
+               .dpl-box {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 3px;
+                    margin-top: 4px;
+               }
+               .dpl-box span {
+                    background: #0a2540;
+                    color: #fff;
+                    padding: 2px 8px;
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: 600;
+               }
+               .input-group {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 6px;
+                    align-items: center;
+                    margin-top: 20px;
+                    margin-bottom: 8px;
+               }
+               .input-group label {
+                    color: #1a3a5a;
+                    font-weight: 500;
+                    font-size: 0.78rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+               }
+               .input-group input {
+                    border: 1px solid #d0dce8;
+                    border-radius: 30px;
+                    padding: 3px 10px;
+                    width: 80px;
+                    font-size: 0.78rem;
+                    outline: none;
+               }
+               .input-group input:focus {
+                    border-color: #0a2540;
+               }
+               .nav-link {
+                    display: inline-block;
+                    margin-top: 4px;
+                    font-size: 0.75rem;
+                    color: #0a2540;
+                    cursor: pointer;
+                    text-decoration: underline;
+                    font-weight: 600;
+               }
+               .nav-link:hover {
+                    color: #1a5a7a;
+               }
+               .rumus-box {
+                    background: #f0f7ff;
+                    border-radius: 8px;
+                    padding: 8px 12px;
+                    border-left: 4px solid #2980b9;
+                    flex: 1;
+                    min-width: 120px;
+               }
+               .rumus-box .label {
+                    font-size: 0.6rem;
+                    color: #4a6a8a;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+               }
+               .rumus-box .isi {
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    color: #0a2540;
+                    line-height: 1.4;
+               }
+               .rumus-box.luas {
+                    border-left-color: #e67e22;
+               }
+               .tips-box {
+                    background: #eaf2fa;
+                    border-radius: 8px;
+                    padding: 8px 14px;
+                    border-left: 4px solid #f5b342;
+                    margin-top: 8px;
+               }
+               .tips-box h4 {
+                    color: #0a2540;
+                    font-size: 0.85rem;
+                    margin-bottom: 4px;
+               }
+               .tips-box ul {
+                    color: #1a3a5a;
+                    font-size: 0.78rem;
+                    line-height: 1.6;
+                    padding-left: 18px;
+               }
+               @media (max-width: 800px) {
+                    .slide-container {
+                         aspect-ratio: unset;
+                         min-height: 100vh;
+                         border-radius: 16px;
+                    }
+                    .slide-content {
+                         padding: 12px 16px;
+                    }
+                    .slide-nav {
+                         padding: 6px 14px;
+                         flex-wrap: wrap;
+                         gap: 4px;
+                         justify-content: center;
+                    }
+                    .info-grid {
+                         grid-template-columns: 1fr 1fr;
+                    }
+                    .rumus-box {
+                         min-width: 80px;
+                         padding: 4px 8px;
+                    }
+                    .rumus-box .isi {
+                         font-size: 0.7rem;
+                    }
+               }
+               @media (max-width: 500px) {
+                    .info-grid {
+                         grid-template-columns: 1fr;
+                    }
+                    .slide-nav .indicator {
+                         font-size: 0.7rem;
+                    }
+                    .nav-btn {
+                         padding: 3px 12px;
+                         font-size: 0.7rem;
+                    }
+                    .rumus-box .isi {
+                         font-size: 0.6rem;
+                    }
+               }
+          </style>
+     </head>
+     <body>
+          <div class="slide-container">
+               <div class="slide-content" id="slideContent">
+                    <!-- ========== SLIDE 0: SPLASH / PEMBUKA ========== -->
+                    <br />
+                    <div
+                         class="slide"
+                         data-slide="0"
+                         style="
+                              background-image: url('splash.jpg');
+                              background-size: cover;
+                              background-position: center;
+                              background-repeat: no-repeat;
+                         "
+                    >
+                         <div
+                              style="
+                                   display: flex;
+                                   flex-direction: column;
+                                   justify-content: center;
+                                   align-items: center;
+                                   width: 100%;
+                                   height: max-content;
+                                   min-height: 500px;
+                                   text-align: center;
+                                   padding: 20px;
+                              "
+                         >
+                              <button
+                                   onclick="goToSlide(1)"
+                                   style="
+                                        position: absolute;
+                                        bottom: 100px;
+                                        background: #0a2540;
+                                        border: none;
+                                        padding: 16px 48px;
+                                        border-radius: 60px;
+                                        color: #fff;
+                                        font-size: 1.3rem;
+                                        font-weight: 700;
+                                        cursor: pointer;
+                                        transition: 0.3s;
+                                        box-shadow: 0 8px 24px
+                                             rgba(10, 37, 64, 0.25);
+                                        letter-spacing: 0.5px;
+                                   "
+                                   onmouseover="
+                                        this.style.transform = 'scale(1.04)';
+                                        this.style.boxShadow =
+                                             '0 12px 32px rgba(10,37,64,0.35)';
+                                   "
+                                   onmouseout="
+                                        this.style.transform = 'scale(1)';
+                                        this.style.boxShadow =
+                                             '0 8px 24px rgba(10,37,64,0.25)';
+                                   "
+                              >
+                                   🚀 Mulai Belajar
+                              </button>
+                              <p
+                                   style="
+                                        position: absolute;
+                                        bottom: 100px;
+                                        left: 50px;
+                                        color: #1a5a7a;
+                                        font-size: 0.85rem;
+                                   "
+                              >
+                                   Ilustrasi gambar dan Voice Over dibuat dengan bantuan AI
+                              </p>
+                         </div>
+                    </div>
+                    <!-- ========== SLIDE 1: PENDAHULUAN ========== -->
+                    <div class="slide active" data-slide="1">
+                         <div style="text-align: center; padding: 10px 0 4px">
+                              <h1
+                                   style="
+                                        font-size: 1.6rem;
+                                        color: #0a2540;
+                                        margin: 4px 0;
+                                   "
+                              >
+                                   👗 Belajar Lingkaran & Usaha Rok Payung
+                              </h1>
+                              <p style="color: #1a5a7a; font-size: 0.85rem">
+                                   Dari Konsep Dasar hingga Kewirausahaan
+                              </p>
+                         </div>
+
+                         <div class="cp-box">
+                              <h4>🎯 Capaian Pembelajaran</h4>
+                              <p>
+                                   <strong
+                                        >Menerapkan, mengidentifikasi dan
+                                        menjelaskan hubungan antara unsur-unsur
+                                        lingkaran untuk menyelesaikan
+                                        masalah.</strong
+                                   >
+                              </p>
+                         </div>
+                         <div class="card">
+                              <div class="card-title">
+                                   📋 Dimensi Profil Lulusan (DPL)
+                              </div>
+                              <div class="dpl-box">
+                                   <span>🧠 Penalaran Kritis</span>
+                                   <span>💡 Kreativitas</span>
+                                   <span>🤝 Kolaborasi</span>
+                                   <span>🚀 Kemandirian</span>
+                                   <span>💬 Komunikasi</span>
+                              </div>
+                         </div>
+                         <div style="text-align: center; margin-top: 5rem">
+                              <p style="color: #1e3a5a; font-size: 1rem">
+                                   Modul ini terdiri dari
+                                   <strong>16 slide</strong>. Gunakan tombol
+                                   navigasi di bawah.
+                              </p>
+                         </div>
+
+                         <div
+                              style="
+                                   display: flex;
+                                   justify-content: center;
+                                   gap: 4px;
+                                   flex-wrap: wrap;
+                                   margin-top: 4px;
+                              "
+                         >
+                              <span
+                                   style="
+                                        background: #f9fbfd;
+                                        padding: 3px 8px;
+                                        border-radius: 6px;
+                                        border: 1px solid #e6edf4;
+                                        font-size: 12px;
+                                   "
+                                   >📖 Definisi</span
+                              >
+                              <span
+                                   style="
+                                        background: #f9fbfd;
+                                        padding: 3px 8px;
+                                        border-radius: 6px;
+                                        border: 1px solid #e6edf4;
+                                        font-size: 12px;
+                                   "
+                                   >🔍 Unsur</span
+                              >
+                              <span
+                                   style="
+                                        background: #f9fbfd;
+                                        padding: 3px 8px;
+                                        border-radius: 6px;
+                                        border: 1px solid #e6edf4;
+                                        font-size: 12px;
+                                   "
+                                   >⭕ Sudut</span
+                              >
+                              <span
+                                   style="
+                                        background: #f9fbfd;
+                                        padding: 3px 8px;
+                                        border-radius: 6px;
+                                        border: 1px solid #e6edf4;
+                                        font-size: 12px;
+                                   "
+                                   >📐 Juring</span
+                              >
+                              <span
+                                   style="
+                                        background: #f9fbfd;
+                                        padding: 3px 8px;
+                                        border-radius: 6px;
+                                        border: 1px solid #e6edf4;
+                                        font-size: 12px;
+                                   "
+                                   >👗 Rok</span
+                              >
+                              <span
+                                   style="
+                                        background: #f9fbfd;
+                                        padding: 3px 8px;
+                                        border-radius: 6px;
+                                        border: 1px solid #e6edf4;
+                                        font-size: 12px;
+                                   "
+                                   >💰 Biaya</span
+                              >
+                         </div>
+                         <audio controls style="width: 100%; margin: 6px 0">
+                              <source
+                                   src="voice/slide 2.mp3"
+                                   type="audio/mpeg"
+                              />
+                         </audio>
+                    </div>
+
+                    <!-- ========== SLIDE 2: ASESMEN AWAL ========== -->
+                    <div class="slide" data-slide="2">
+                         <div class="card">
+                              <div class="card-title">
+                                   🧠 Asesmen Awal – Seberapa Siap Kamu?
+                              </div>
+                              <div class="card-sub">
+                                   Jawab 5 pertanyaan berikut untuk mengetahui
+                                   kesiapanmu!
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   1. Rumus luas persegi panjang adalah....
+                              </div>
+                              <div class="answer-area">
+                                   <select
+                                        class="soal-prasyarat"
+                                        data-benar="p×l"
+                                   >
+                                        <option value="">-- Pilih --</option>
+                                        <option value="p×l">p × l</option>
+                                        <option value="2×(p+l)">
+                                             2 × (p + l)
+                                        </option>
+                                        <option value="p×l×t">p × l × t</option>
+                                   </select>
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   2. Berapa besar sudut siku-siku?
+                              </div>
+                              <div class="answer-area">
+                                   <select
+                                        class="soal-prasyarat"
+                                        data-benar="90°"
+                                   >
+                                        <option value="">-- Pilih --</option>
+                                        <option value="45°">45°</option>
+                                        <option value="90°">90°</option>
+                                        <option value="180°">180°</option>
+                                   </select>
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   3. Apa yang dimaksud dengan sudut?
+                              </div>
+                              <div class="answer-area">
+                                   <select
+                                        class="soal-prasyarat"
+                                        data-benar="Daerah yang dibentuk oleh dua garis yang bertemu"
+                                   >
+                                        <option value="">-- Pilih --</option>
+                                        <option
+                                             value="Daerah yang dibentuk oleh dua garis yang bertemu"
+                                        >
+                                             Daerah yang dibentuk oleh dua garis
+                                             yang bertemu
+                                        </option>
+                                        <option
+                                             value="Garis lurus yang tidak berujung"
+                                        >
+                                             Garis lurus yang tidak berujung
+                                        </option>
+                                        <option
+                                             value="Titik perpotongan dua garis"
+                                        >
+                                             Titik perpotongan dua garis
+                                        </option>
+                                   </select>
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   4. Sebuah persegi memiliki sisi 5 cm. Berapa
+                                   kelilingnya?
+                              </div>
+                              <div class="answer-area">
+                                   <select
+                                        class="soal-prasyarat"
+                                        data-benar="20 cm"
+                                   >
+                                        <option value="">-- Pilih --</option>
+                                        <option value="10 cm">10 cm</option>
+                                        <option value="20 cm">20 cm</option>
+                                        <option value="25 cm">25 cm</option>
+                                   </select>
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   5. Apa yang dimaksud dengan bangun datar?
+                              </div>
+                              <div class="answer-area">
+                                   <select
+                                        class="soal-prasyarat"
+                                        data-benar="Bentuk dua dimensi yang memiliki panjang dan lebar"
+                                   >
+                                        <option value="">-- Pilih --</option>
+                                        <option
+                                             value="Bentuk tiga dimensi yang memiliki volume"
+                                        >
+                                             Bentuk tiga dimensi yang memiliki
+                                             volume
+                                        </option>
+                                        <option
+                                             value="Bentuk dua dimensi yang memiliki panjang dan lebar"
+                                        >
+                                             Bentuk dua dimensi yang memiliki
+                                             panjang dan lebar
+                                        </option>
+                                        <option
+                                             value="Bentuk yang hanya memiliki panjang"
+                                        >
+                                             Bentuk yang hanya memiliki panjang
+                                        </option>
+                                   </select>
+                              </div>
+                         </div>
+                         <button class="btn" onclick="cekPrasyarat()">
+                              ✅ Cek Kesiapan
+                         </button>
+                         <span class="feedback" id="feedbackPrasyarat"></span>
+                    </div>
+
+                    <!-- ========== SLIDE 3: DEFINISI (MATERI) ========== -->
+                    <div class="slide" data-slide="3">
+                         <div class="tujuan-box">
+                              <strong>🎯 Tujuan:</strong> Setelah slide ini,
+                              kamu mampu menjelaskan definisi lingkaran sebagai
+                              himpunan titik yang berjarak sama dari titik
+                              pusat.
+                         </div>
+                         <audio controls style="width: 100%; margin: 6px 0">
+                              <source
+                                   src="voice/slide4.mp3"
+                                   type="audio/mpeg"
+                              />
+                         </audio>
+                         <div class="prinsip-box">
+                              <span class="berkesadaran">Berkesadaran</span>
+                              <span class="bermakna">Bermakna</span>
+                              <span class="menggembirakan">Menggembirakan</span>
+                         </div>
+                         <div class="card">
+                              <div class="card-title">
+                                   📖 Definisi Lingkaran
+                              </div>
+                              <div class="card-sub">
+                                   <strong>Lingkaran</strong> adalah himpunan
+                                   semua titik yang berjarak sama terhadap satu
+                                   titik tertentu (titik pusat).
+                              </div>
+                              <div class="canvas-wrap">
+                                   <canvas
+                                        id="canvasDefinisi"
+                                        width="600"
+                                        height="260"
+                                   ></canvas>
+                              </div>
+                              <div class="control-group">
+                                   <label
+                                        >Jari-jari (r)
+                                        <span id="jariDefinisiLabel"
+                                             >80</span
+                                        ></label
+                                   >
+                                   <input
+                                        type="range"
+                                        id="jariDefinisiSlider"
+                                        min="30"
+                                        max="150"
+                                        value="80"
+                                        step="1"
+                                   />
+                              </div>
+                              <div class="control-group">
+                                   <label
+                                        >Jumlah Titik
+                                        <span id="jumlahTitikLabel"
+                                             >12</span
+                                        ></label
+                                   >
+                                   <input
+                                        type="range"
+                                        id="jumlahTitikSlider"
+                                        min="1"
+                                        max="200"
+                                        value="12"
+                                        step="1"
+                                   />
+                              </div>
+                              <div class="info-grid">
+                                   <div class="info-box">
+                                        <div class="label">Jari-jari (r)</div>
+                                        <div class="value" id="defR">80</div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">Jumlah Titik</div>
+                                        <div class="value" id="defN">12</div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">
+                                             Jarak ke Pusat (O)
+                                        </div>
+                                        <div class="value" id="defJarak">
+                                             80 <small>satuan</small>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class="kesimpulan-box">
+                                   <h4>📌 Kesimpulan</h4>
+                                   <p>
+                                        Semua titik memiliki
+                                        <strong>jarak yang sama</strong> yaitu
+                                        <strong
+                                             >r =
+                                             <span id="defR2">80</span>
+                                             satuan</strong
+                                        >
+                                        dari titik pusat <strong>O</strong>.
+                                   </p>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- ========== SLIDE 4: SOAL DEFINISI ========== -->
+                    <div class="slide" data-slide="4">
+                         <div class="card">
+                              <div class="card-title">
+                                   🧠 Soal – Benda Berbentuk Lingkaran
+                              </div>
+                              <div class="card-sub">
+                                   Manakah yang berbentuk lingkaran? Centang
+                                   semua yang benar!
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="answer-area">
+                                   <div class="checkbox-group">
+                                        <label
+                                             ><input
+                                                  type="checkbox"
+                                                  class="cek-lingkaran"
+                                                  value="roda"
+                                             />
+                                             Roda sepeda</label
+                                        >
+                                        <label
+                                             ><input
+                                                  type="checkbox"
+                                                  class="cek-lingkaran"
+                                                  value="papan"
+                                             />
+                                             Papan tulis</label
+                                        >
+                                        <label
+                                             ><input
+                                                  type="checkbox"
+                                                  class="cek-lingkaran"
+                                                  value="jam"
+                                             />
+                                             Jam dinding</label
+                                        >
+                                        <label
+                                             ><input
+                                                  type="checkbox"
+                                                  class="cek-lingkaran"
+                                                  value="kertas"
+                                             />
+                                             Kertas HVS</label
+                                        >
+                                        <label
+                                             ><input
+                                                  type="checkbox"
+                                                  class="cek-lingkaran"
+                                                  value="piring"
+                                             />
+                                             Piring makan</label
+                                        >
+                                        <label
+                                             ><input
+                                                  type="checkbox"
+                                                  class="cek-lingkaran"
+                                                  value="buku"
+                                             />
+                                             Buku</label
+                                        >
+                                        <label
+                                             ><input
+                                                  type="checkbox"
+                                                  class="cek-lingkaran"
+                                                  value="koin"
+                                             />
+                                             Koin logam</label
+                                        >
+                                        <label
+                                             ><input
+                                                  type="checkbox"
+                                                  class="cek-lingkaran"
+                                                  value="meja"
+                                             />
+                                             Meja</label
+                                        >
+                                   </div>
+                              </div>
+                              <button class="btn" onclick="cekSoalLingkaran()">
+                                   Cek Jawaban
+                              </button>
+                              <span
+                                   class="feedback"
+                                   id="feedbackLingkaran"
+                              ></span>
+                         </div>
+                    </div>
+
+                    <!-- ========== SLIDE 5: UNSUR (MATERI) + PERHITUNGAN DI SAMPING ========== -->
+                    <div class="slide" data-slide="5">
+                         <div class="tujuan-box">
+                              <strong>🎯 Tujuan:</strong> Setelah slide ini,
+                              kamu mampu mengidentifikasi 7 unsur lingkaran dan
+                              menjelaskan rumus luas &amp; keliling.
+                         </div>
+                         <audio controls style="width: 100%; margin: 6px 0">
+                              <source
+                                   src="voice/slide6.mp3"
+                                   type="audio/mpeg"
+                              />
+                         </audio>
+                         <div class="prinsip-box">
+                              <span class="berkesadaran">Berkesadaran</span>
+                              <span class="bermakna">Bermakna</span>
+                              <span class="menggembirakan">Menggembirakan</span>
+                         </div>
+                         <div class="card">
+                              <div class="card-title">
+                                   🔍 Unsur-unsur Lingkaran &amp; Rumus Dasar
+                              </div>
+                              <div class="card-sub">
+                                   Pilih unsur yang ingin dipelajari, geser
+                                   slider untuk melihat perubahan.
+                              </div>
+                              <div
+                                   style="
+                                        display: flex;
+                                        flex-wrap: wrap;
+                                        gap: 8px;
+                                        align-items: center;
+                                        margin: 6px 0;
+                                   "
+                              >
+                                   <div class="rumus-box">
+                                        <div class="label">Keliling (K)</div>
+                                        <div class="isi" id="rumusKeliling">
+                                             K = 2 × π × r<br />
+                                             = 2 × 3,14 × 100<br />
+                                             = 628 satuan
+                                        </div>
+                                   </div>
+                                   <div style="flex: 0 1 55%; min-width: 260px">
+                                        <div class="canvas-wrap">
+                                             <canvas
+                                                  id="canvasUnsur"
+                                                  width="600"
+                                                  height="260"
+                                             ></canvas>
+                                        </div>
+                                   </div>
+                                   <div class="rumus-box luas">
+                                        <div class="label">Luas (L)</div>
+                                        <div class="isi" id="rumusLuas">
+                                             L = π × r²<br />
+                                             = 3,14 × 100²<br />
+                                             = 31.400 satuan²
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class="control-group">
+                                   <label
+                                        >Jari-jari (r)
+                                        <span id="jariUnsurLabel"
+                                             >100</span
+                                        ></label
+                                   >
+                                   <input
+                                        type="range"
+                                        id="jariUnsurSlider"
+                                        min="40"
+                                        max="160"
+                                        value="100"
+                                        step="1"
+                                   />
+                              </div>
+                              <div class="btn-group">
+                                   <button
+                                        class="btn-mode active-mode"
+                                        data-mode="center"
+                                   >
+                                        📍 Pusat
+                                   </button>
+                                   <button class="btn-mode" data-mode="radius">
+                                        📏 Jari-jari
+                                   </button>
+                                   <button
+                                        class="btn-mode"
+                                        data-mode="diameter"
+                                   >
+                                        ↔️ Diameter
+                                   </button>
+                                   <button class="btn-mode" data-mode="chord">
+                                        〰️ Busur &amp; Tali
+                                   </button>
+                                   <button class="btn-mode" data-mode="apothem">
+                                        📐 Apotema
+                                   </button>
+                                   <button class="btn-mode" data-mode="segment">
+                                        🧩 Tembereng
+                                   </button>
+                              </div>
+                              <div
+                                   id="unsurDeskripsi"
+                                   style="
+                                        background: #ffffff;
+                                        border-radius: 6px;
+                                        padding: 6px 10px;
+                                        margin-top: 4px;
+                                        border-left: 4px solid #0a2540;
+                                        color: #1a3a5a;
+                                        font-size: 0.78rem;
+                                   "
+                              >
+                                   <strong>Titik Pusat (O)</strong>: Titik yang
+                                   berada tepat di tengah-tengah lingkaran.
+                                   Semua titik pada lingkaran memiliki jarak
+                                   yang sama ke titik pusat.
+                              </div>
+                              <div class="info-grid">
+                                   <div class="info-box">
+                                        <div class="label">Jari-jari (r)</div>
+                                        <div class="value" id="unsurR">100</div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">Diameter (d)</div>
+                                        <div class="value" id="unsurD">200</div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">Keliling (K)</div>
+                                        <div class="value" id="unsurK">
+                                             628 <small>satuan</small>
+                                        </div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">Luas (L)</div>
+                                        <div class="value" id="unsurL">
+                                             31400 <small>satuan²</small>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div
+                                   style="
+                                        background: #eef2f6;
+                                        padding: 4px 10px;
+                                        border-radius: 6px;
+                                        font-size: 0.7rem;
+                                        color: #1e3a5a;
+                                   "
+                              >
+                                   📌 <strong>Rumus:</strong> Keliling = 2πr
+                                   &nbsp;|&nbsp; Luas = πr² &nbsp;|&nbsp;
+                                   Diameter = 2r
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- ========== SLIDE 6: SOAL UNSUR (4 SOAL) ========== -->
+                    <div class="slide" data-slide="6">
+                         <div class="card">
+                              <div class="card-title">
+                                   🧠 Soal – Unsur Lingkaran
+                              </div>
+                              <div class="card-sub">
+                                   Kerjakan 4 soal berikut!
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   1. Garis yang menghubungkan dua titik pada
+                                   lingkaran dan melalui titik pusat disebut....
+                              </div>
+                              <div class="answer-area">
+                                   <select id="jawabUnsur">
+                                        <option value="">-- Pilih --</option>
+                                        <option value="jari-jari">
+                                             Jari-jari
+                                        </option>
+                                        <option value="diameter">
+                                             Diameter
+                                        </option>
+                                        <option value="busur">Busur</option>
+                                        <option value="tali-busur">
+                                             Tali busur
+                                        </option>
+                                   </select>
+                                   <button class="btn" onclick="cekSoalUnsur()">
+                                        Cek
+                                   </button>
+                                   <span
+                                        class="feedback"
+                                        id="feedbackUnsur"
+                                   ></span>
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   2. Lingkaran dengan r = 14 cm. Berapa
+                                   luasnya? (π = 22/7)
+                              </div>
+                              <div class="answer-area">
+                                   <input
+                                        type="number"
+                                        id="jawabLuas"
+                                        placeholder="Luas (cm²)"
+                                   />
+                                   <button class="btn" onclick="cekSoalLuas()">
+                                        Cek
+                                   </button>
+                                   <span
+                                        class="feedback"
+                                        id="feedbackLuas"
+                                   ></span>
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   3. Lingkaran dengan d = 20 cm. Berapa
+                                   kelilingnya? (π = 3,14)
+                              </div>
+                              <div class="answer-area">
+                                   <input
+                                        type="number"
+                                        id="jawabKeliling"
+                                        placeholder="Keliling (cm)"
+                                        step="0.1"
+                                   />
+                                   <button
+                                        class="btn"
+                                        onclick="cekSoalKeliling()"
+                                   >
+                                        Cek
+                                   </button>
+                                   <span
+                                        class="feedback"
+                                        id="feedbackKeliling"
+                                   ></span>
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   4. Garis tegak lurus dari titik pusat ke tali
+                                   busur disebut....
+                              </div>
+                              <div class="answer-area">
+                                   <select id="jawabUnsur2">
+                                        <option value="">-- Pilih --</option>
+                                        <option value="jari-jari">
+                                             Jari-jari
+                                        </option>
+                                        <option value="diameter">
+                                             Diameter
+                                        </option>
+                                        <option value="apotema">Apotema</option>
+                                        <option value="tembereng">
+                                             Tembereng
+                                        </option>
+                                   </select>
+                                   <button
+                                        class="btn"
+                                        onclick="cekSoalUnsur2()"
+                                   >
+                                        Cek
+                                   </button>
+                                   <span
+                                        class="feedback"
+                                        id="feedbackUnsur2"
+                                   ></span>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- ========== SLIDE 7: SUDUT (MATERI) ========== -->
+                    <div class="slide" data-slide="7">
+                         <div class="tujuan-box">
+                              <strong>🎯 Tujuan:</strong> Setelah slide ini,
+                              kamu mampu menjelaskan hubungan sudut pusat dan
+                              sudut keliling (Sudut Pusat = 2 × Sudut Keliling).
+                         </div>
+                         <audio controls style="width: 100%; margin: 6px 0">
+                              <source
+                                   src="voice/slide8.mp3"
+                                   type="audio/mpeg"
+                              />
+                         </audio>
+                         <div class="prinsip-box">
+                              <span class="berkesadaran">Berkesadaran</span>
+                              <span class="bermakna">Bermakna</span>
+                              <span class="menggembirakan">Menggembirakan</span>
+                         </div>
+                         <div class="card">
+                              <div class="card-title">
+                                   ⭕ Sudut Pusat &amp; Sudut Keliling
+                              </div>
+                              <div class="card-sub">
+                                   Geser sudut pusat dan posisi titik C untuk
+                                   melihat hubungannya.
+                              </div>
+                              <div class="canvas-wrap">
+                                   <canvas
+                                        id="canvasSudut"
+                                        width="600"
+                                        height="300"
+                                   ></canvas>
+                              </div>
+                              <div class="control-group">
+                                   <label
+                                        >Sudut Pusat (θ)
+                                        <span id="sudutPusatLabel"
+                                             >80</span
+                                        ></label
+                                   >
+                                   <input
+                                        type="range"
+                                        id="sudutPusatSlider"
+                                        min="10"
+                                        max="180"
+                                        value="80"
+                                        step="1"
+                                   />
+                              </div>
+                              <div class="control-group">
+                                   <label
+                                        >Posisi Titik C (offset °)
+                                        <span id="posisiCLabel">0</span></label
+                                   >
+                                   <input
+                                        type="range"
+                                        id="posisiCSlider"
+                                        min="-40"
+                                        max="40"
+                                        value="0"
+                                        step="1"
+                                   />
+                              </div>
+                              <div class="control-group">
+                                   <label
+                                        >Jari-jari (cm)
+                                        <span id="jariSudutLabel"
+                                             >100</span
+                                        ></label
+                                   >
+                                   <input
+                                        type="range"
+                                        id="jariSudutSlider"
+                                        min="60"
+                                        max="180"
+                                        value="100"
+                                        step="1"
+                                   />
+                              </div>
+                              <div class="info-grid">
+                                   <div class="info-box">
+                                        <div class="label">Sudut Pusat (θ)</div>
+                                        <div class="value" id="nilaiSudutPusat">
+                                             80°
+                                        </div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">
+                                             Sudut Keliling (α)
+                                        </div>
+                                        <div
+                                             class="value"
+                                             id="nilaiSudutKeliling"
+                                        >
+                                             40.0°
+                                        </div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">Hubungan</div>
+                                        <div class="value" id="nilaiHubungan">
+                                             θ = 2α
+                                        </div>
+                                   </div>
+                              </div>
+                              <div class="kesimpulan-box">
+                                   <h4>📌 Kesimpulan</h4>
+                                   <p>
+                                        <strong
+                                             >Sudut Pusat = 2 × Sudut
+                                             Keliling</strong
+                                        >
+                                        (jika menghadap busur yang sama).
+                                        Sebaliknya,
+                                        <strong
+                                             >Sudut Keliling = ½ × Sudut
+                                             Pusat</strong
+                                        >.
+                                   </p>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- ========== SLIDE 8: SOAL SUDUT (2 SOAL) ========== -->
+                    <div class="slide" data-slide="8">
+                         <div class="card">
+                              <div class="card-title">
+                                   🧠 Soal – Sudut Pusat &amp; Keliling
+                              </div>
+                              <div class="card-sub">
+                                   Kerjakan 2 soal berikut! (Kamu boleh
+                                   menggunakan simulator di halaman sebelumnya)
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   1. Jika sudut pusat = 100°, berapa sudut
+                                   keliling yang menghadap busur sama?
+                              </div>
+                              <div class="answer-area">
+                                   <input
+                                        type="number"
+                                        id="jawabSudut1"
+                                        placeholder="Sudut keliling (°)"
+                                        step="0.1"
+                                   />
+                                   <button
+                                        class="btn"
+                                        onclick="cekSoalSudut1()"
+                                   >
+                                        Cek
+                                   </button>
+                                   <span
+                                        class="feedback"
+                                        id="feedbackSudut1"
+                                   ></span>
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   2. Jika sudut keliling = 45°, berapa sudut
+                                   pusat yang menghadap busur sama?
+                              </div>
+                              <div class="answer-area">
+                                   <input
+                                        type="number"
+                                        id="jawabSudut2"
+                                        placeholder="Sudut pusat (°)"
+                                        step="0.1"
+                                   />
+                                   <button
+                                        class="btn"
+                                        onclick="cekSoalSudut2()"
+                                   >
+                                        Cek
+                                   </button>
+                                   <span
+                                        class="feedback"
+                                        id="feedbackSudut2"
+                                   ></span>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- ========== SLIDE 9: JURING & BUSUR (MATERI) ========== -->
+                    <div class="slide" data-slide="9">
+                         <div class="tujuan-box">
+                              <strong>🎯 Tujuan:</strong> Setelah slide ini,
+                              kamu mampu menghitung luas juring dan panjang
+                              busur menggunakan rumus (θ/360)×πr² dan
+                              (θ/360)×2πr.
+                         </div>
+                         <audio controls style="width: 100%; margin: 6px 0">
+                              <source
+                                   src="voice/slide10.mp3"
+                                   type="audio/mpeg"
+                              />
+                         </audio>
+                         <div class="prinsip-box">
+                              <span class="berkesadaran">Berkesadaran</span>
+                              <span class="bermakna">Bermakna</span>
+                              <span class="menggembirakan">Menggembirakan</span>
+                         </div>
+                         <div class="card">
+                              <div class="card-title">
+                                   📐 Luas Juring &amp; Panjang Busur
+                              </div>
+                              <div class="card-sub">
+                                   Atur sudut dan jari-jari untuk menghitung
+                                   luas juring dan panjang busur.
+                              </div>
+                              <div class="canvas-wrap">
+                                   <canvas
+                                        id="canvasJuring"
+                                        width="600"
+                                        height="260"
+                                   ></canvas>
+                              </div>
+                              <div class="control-group">
+                                   <label
+                                        >Jari-jari (r)
+                                        <span id="jariJuringLabel"
+                                             >60</span
+                                        ></label
+                                   >
+                                   <input
+                                        type="range"
+                                        id="jariJuringSlider"
+                                        min="10"
+                                        max="80"
+                                        value="55"
+                                        step="0.5"
+                                   />
+                              </div>
+                              <div class="control-group">
+                                   <label
+                                        >Sudut Pusat (θ)
+                                        <span id="sudutJuringLabel"
+                                             >90</span
+                                        ></label
+                                   >
+                                   <input
+                                        type="range"
+                                        id="sudutJuringSlider"
+                                        min="10"
+                                        max="360"
+                                        value="90"
+                                        step="1"
+                                   />
+                              </div>
+                              <div class="info-grid">
+                                   <div class="info-box">
+                                        <div class="label">Jari-jari (r)</div>
+                                        <div class="value" id="juringR">
+                                             60 <small>cm</small>
+                                        </div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">Luas Juring</div>
+                                        <div class="value" id="luasJuring">
+                                             2827.4 <small>cm²</small>
+                                        </div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">Panjang Busur</div>
+                                        <div class="value" id="panjangBusur">
+                                             94.2 <small>cm</small>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div
+                                   style="
+                                        background: #eef2f6;
+                                        padding: 4px 10px;
+                                        border-radius: 6px;
+                                        font-size: 0.7rem;
+                                        color: #1e3a5a;
+                                   "
+                              >
+                                   📌 <strong>Rumus:</strong> Luas Juring =
+                                   (θ/360) × πr² &nbsp;|&nbsp; Panjang Busur =
+                                   (θ/360) × 2πr
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- ========== SLIDE 10: SOAL JURING ========== -->
+                    <div class="slide" data-slide="10">
+                         <div class="card">
+                              <div class="card-title">
+                                   🧠 Soal – Luas Juring
+                              </div>
+                              <div class="card-sub">Kerjakan soal berikut!</div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   Juring dengan θ = 120° dan r = 21 cm. Berapa
+                                   luasnya? (π = 22/7)
+                              </div>
+                              <div class="answer-area">
+                                   <input
+                                        type="number"
+                                        id="jawabJuring"
+                                        placeholder="Luas (cm²)"
+                                        step="0.1"
+                                   />
+                                   <button
+                                        class="btn"
+                                        onclick="cekSoalJuring()"
+                                   >
+                                        Cek
+                                   </button>
+                                   <span
+                                        class="feedback"
+                                        id="feedbackJuring"
+                                   ></span>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- ========== SLIDE 11: PENGANTAR ROK PAYUNG ========== -->
+                    <div class="slide" data-slide="11">
+                         <div class="tujuan-box">
+                              <strong>🎯 Tujuan:</strong> Setelah slide ini,
+                              kamu mampu melihat bahwa bentuk rok payung adalah
+                              aplikasi dari juring lingkaran.
+                         </div>
+                         <audio controls style="width: 100%; margin: 6px 0">
+                              <source
+                                   src="voice/slide12.mp3"
+                                   type="audio/mpeg"
+                              />
+                         </audio>
+                         <div class="prinsip-box">
+                              <span class="berkesadaran">Berkesadaran</span>
+                              <span class="bermakna">Bermakna</span>
+                              <span class="menggembirakan">Menggembirakan</span>
+                         </div>
+                         <div class="card">
+                              <div class="card-title">
+                                   👗 Mengenal Rok Payung dari Juring
+                              </div>
+                              <div class="card-sub">
+                                   Perhatikan bentuk juring di bawah ini. Inilah
+                                   yang menjadi dasar pembuatan rok payung!
+                                   Geser slider untuk melihat berbagai ukuran
+                                   rok.
+                              </div>
+                              <div class="canvas-wrap">
+                                   <div
+                                        style="
+                                             text-align: center;
+                                             margin: 6px 0;
+                                        "
+                                   >
+                                        <img
+                                             src="rok-payung.jpg"
+                                             alt="Ilustrasi rok payung sumber: flipbuilder.com"
+                                             style="
+                                                  max-width: 100%;
+                                                  height: auto;
+                                                  max-height: 220px;
+                                                  border-radius: 8px;
+                                                  box-shadow: 0 2px 8px
+                                                       rgba(0, 0, 0, 0.08);
+                                             "
+                                        />
+                                        <p
+                                             style="
+                                                  font-size: 0.6rem;
+                                                  color: #4a6a8a;
+                                                  margin-top: 2px;
+                                             "
+                                        >
+                                             Ilustrasi rok payung <br />
+                                             sumber: flipbuilder.com
+                                        </p>
+                                   </div>
+                                   <canvas
+                                        id="canvasRok"
+                                        width="600"
+                                        height="260"
+                                   ></canvas>
+                              </div>
+                              <div class="control-group">
+                                   <label
+                                        >Lebar Rok (r)
+                                        <span id="jariRokLabel">80</span></label
+                                   >
+                                   <input
+                                        type="range"
+                                        id="jariRokSlider"
+                                        min="10"
+                                        max="150"
+                                        value="55"
+                                        step="1"
+                                   />
+                              </div>
+                              <div class="control-group">
+                                   <label
+                                        >Bukaan Rok (θ)
+                                        <span id="sudutRokLabel"
+                                             >120</span
+                                        ></label
+                                   >
+                                   <input
+                                        type="range"
+                                        id="sudutRokSlider"
+                                        min="30"
+                                        max="180"
+                                        value="120"
+                                        step="1"
+                                   />
+                              </div>
+                              <div class="info-grid">
+                                   <div class="info-box">
+                                        <div class="label">Lebar Rok (r)</div>
+                                        <div class="value" id="rokR">
+                                             80 <small>cm</small>
+                                        </div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">Bukaan Rok (θ)</div>
+                                        <div class="value" id="rokSudut">
+                                             120°
+                                        </div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">
+                                             Luas Kain per Panel
+                                        </div>
+                                        <div class="value" id="rokLuas">
+                                             6702.1 <small>cm²</small>
+                                        </div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">
+                                             Panjang Bawah Rok
+                                        </div>
+                                        <div class="value" id="rokBusur">
+                                             167.6 <small>cm</small>
+                                        </div>
+                                   </div>
+                              </div>
+                              <div
+                                   style="
+                                        background: #fef9e7;
+                                        padding: 6px 12px;
+                                        border-radius: 6px;
+                                        border-left: 4px solid #f5b342;
+                                        font-size: 0.78rem;
+                                        color: #1a3a5a;
+                                   "
+                              >
+                                   💡 <strong>Tahukah kamu?</strong> Rok payung
+                                   dibuat dari potongan kain berbentuk juring.
+                                   Lebar rok = jari-jari, bukaan rok = sudut
+                                   juring.
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- ========== SLIDE 12: PERHITUNGAN KAIN & BIAYA ROK ========== -->
+                    <div class="slide" data-slide="12">
+                         <div class="tujuan-box">
+                              <strong>🎯 Tujuan:</strong> Setelah slide ini,
+                              kamu mampu menghitung luas kain, biaya bahan, dan
+                              memperkirakan harga jual rok payung dengan
+                              taksiran keuntungan 30%.
+                         </div>
+                         <audio controls style="width: 100%; margin: 6px 0">
+                              <source
+                                   src="voice/slide13.mp3"
+                                   type="audio/mpeg"
+                              />
+                         </audio>
+                         <div class="prinsip-box">
+                              <span class="berkesadaran">Berkesadaran</span>
+                              <span class="bermakna">Bermakna</span>
+                              <span class="menggembirakan">Menggembirakan</span>
+                         </div>
+                         <div class="card">
+                              <div class="card-title">
+                                   📐 Perhitungan Kain & Biaya Rok Payung
+                              </div>
+                              <div class="card-sub">
+                                   Gunakan slider di slide sebelumnya untuk
+                                   menentukan ukuran rok. Lalu hitung total kain
+                                   dan biayanya!
+                              </div>
+
+                              <div
+                                   class="info-grid"
+                                   style="
+                                        background: #f0f7ff;
+                                        border-radius: 8px;
+                                        padding: 6px;
+                                   "
+                              >
+                                   <div
+                                        class="info-box"
+                                        style="border-left-color: #f5b342"
+                                   >
+                                        <div class="label">Lebar Rok (r)</div>
+                                        <div class="value" id="rokR2">
+                                             80 <small>cm</small>
+                                        </div>
+                                   </div>
+                                   <div
+                                        class="info-box"
+                                        style="border-left-color: #f5b342"
+                                   >
+                                        <div class="label">Bukaan Rok (θ)</div>
+                                        <div class="value" id="rokSudut2">
+                                             120°
+                                        </div>
+                                   </div>
+                                   <div
+                                        class="info-box"
+                                        style="border-left-color: #f5b342"
+                                   >
+                                        <div class="label">Luas per Panel</div>
+                                        <div class="value" id="rokLuas2">
+                                             6702.1 <small>cm²</small>
+                                        </div>
+                                   </div>
+                              </div>
+
+                              <div class="input-group">
+                                   <label
+                                        >Jumlah panel rok
+                                        <input
+                                             type="number"
+                                             id="jumlahPanel"
+                                             value="1"
+                                             step="1"
+                                             min="1"
+                                             max="8"
+                                   /></label>
+                                   <label
+                                        >Harga kain per meter (Rp)
+                                        <input
+                                             type="number"
+                                             id="hargaKainRok"
+                                             value="30000"
+                                             step="1000"
+                                   /></label>
+                              </div>
+                              <button
+                                   class="btn"
+                                   onclick="hitungKainDanBiayaRok()"
+                              >
+                                   Hitung Sekarang
+                              </button>
+
+                              <div class="info-grid" style="margin-top: 6px">
+                                   <div class="info-box">
+                                        <div class="label">Total Luas Kain</div>
+                                        <div class="value" id="totalKainRok">
+                                             26808.4 <small>cm²</small>
+                                        </div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">Total Kain (m²)</div>
+                                        <div class="value" id="totalKainM2">
+                                             2.681 <small>m²</small>
+                                        </div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">Biaya Kain</div>
+                                        <div class="value" id="biayaKainRok">
+                                             Rp 80.425
+                                        </div>
+                                   </div>
+                                   <div class="info-box">
+                                        <div class="label">
+                                             Harga Jual Minimal (30% markup)
+                                        </div>
+                                        <div class="value" id="hargaJualRok">
+                                             Rp 104.553
+                                        </div>
+                                   </div>
+                              </div>
+                              <div
+                                   style="
+                                        background: #eef2f6;
+                                        padding: 4px 10px;
+                                        border-radius: 6px;
+                                        font-size: 0.65rem;
+                                        color: #1e3a5a;
+                                        margin-top: 4px;
+                                   "
+                              >
+                                   📌 <strong>Catatan:</strong> Rok payung
+                                   biasanya terdiri dari 1-2 panel. Biaya
+                                   dihitung dari luas total kain (cm²)
+                                   dikonversi ke m².
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- ========== SLIDE 13: SOAL ROK PAYUNG (2 SOAL) ========== -->
+                    <div class="slide" data-slide="13">
+                         <div class="card">
+                              <div class="card-title">🧠 Soal – Rok Payung</div>
+                              <div class="card-sub">
+                                   Kerjakan 2 soal berikut! (Kamu boleh
+                                   menggunakan simulator di halaman sebelumnya)
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   1. Seorang penjahit ingin membuat rok payung
+                                   dengan lebar rok (r) = 70 cm dan bukaan rok
+                                   (θ) = 90°. Jika rok terdiri dari 4 panel,
+                                   berapa total luas kain yang dibutuhkan? (π =
+                                   22/7)
+                              </div>
+                              <div class="answer-area">
+                                   <input
+                                        type="number"
+                                        id="jawabRok1"
+                                        placeholder="Luas total (cm²)"
+                                        step="0.1"
+                                   />
+                                   <button class="btn" onclick="cekSoalRok1()">
+                                        Cek
+                                   </button>
+                                   <span
+                                        class="feedback"
+                                        id="feedbackRok1"
+                                   ></span>
+                              </div>
+                         </div>
+                         <div class="evaluation-box">
+                              <div class="soal">
+                                   2. Berdasarkan soal nomor 1, jika harga kain
+                                   per meter = Rp 25.000 (lebar kain 150 cm),
+                                   berapa biaya kain yang dibutuhkan?
+                              </div>
+                              <div class="answer-area">
+                                   <input
+                                        type="number"
+                                        id="jawabRok2"
+                                        placeholder="Biaya kain (Rp)"
+                                        step="100"
+                                   />
+                                   <button class="btn" onclick="cekSoalRok2()">
+                                        Cek
+                                   </button>
+                                   <span
+                                        class="feedback"
+                                        id="feedbackRok2"
+                                   ></span>
+                              </div>
+                         </div>
+                    </div>
+
+                    <!-- ========== SLIDE 14: KESIMPULAN & REFLEKSI ========== -->
+                    <div class="slide" data-slide="14">
+                         <div class="card">
+                              <div class="card-title">
+                                   📊 Kesimpulan, Refleksi &amp; Rekap Skor
+                              </div>
+                              <div class="card-sub">
+                                   Selamat! Kamu telah menyelesaikan semua
+                                   materi. Saatnya merefleksikan pembelajaran.
+                              </div>
+                         </div>
+                         <audio controls style="width: 100%; margin: 6px 0">
+                              <source
+                                   src="voice/slide15.mp3"
+                                   type="audio/mpeg"
+                              />
+                         </audio>
+
+                         <div class="refleksi-box">
+                              <h4>🧘 Refleksi Diri</h4>
+                              <p>
+                                   Jawablah pertanyaan berikut dalam hati atau
+                                   tulis di buku catatanmu:
+                              </p>
+                              <div class="pertanyaan">
+                                   1. Apa hal yang paling menarik dari
+                                   pembelajaran ini?
+                              </div>
+                              <div class="pertanyaan">
+                                   2. Bagaimana perasaanmu setelah bisa
+                                   menghitung biaya bahan dan harga jual
+                                   sendiri?
+                              </div>
+                              <div class="pertanyaan">
+                                   3. Apa yang akan kamu lakukan jika ingin
+                                   memulai usaha konveksi?
+                              </div>
+                              <div class="pertanyaan">
+                                   4. Bagaimana kamu akan menerapkan ilmu ini
+                                   dalam kehidupan sehari-hari?
+                              </div>
+                         </div>
+
+                         <div class="tips-box">
+                              <h4>💡 Tips Memulai Usaha Konveksi</h4>
+                              <ul>
+                                   <li>
+                                        <strong>Mulai dari yang kecil:</strong>
+                                        Coba buat 1-2 rok dulu untuk melihat
+                                        minat pasar.
+                                   </li>
+                                   <li>
+                                        <strong
+                                             >Hitung biaya dengan
+                                             teliti:</strong
+                                        >
+                                        Jangan lupa tambahkan biaya jahit,
+                                        renda, dan aksesoris.
+                                   </li>
+                                   <li>
+                                        <strong>Tentukan harga jual:</strong>
+                                        Harga jual = biaya produksi + keuntungan
+                                        yang diinginkan (biasanya 30-50%).
+                                   </li>
+                                   <li>
+                                        <strong>Pasarkan secara online:</strong>
+                                        Manfaatkan media sosial untuk menjangkau
+                                        lebih banyak pembeli.
+                                   </li>
+                                   <li>
+                                        <strong>Terus belajar:</strong> Semakin
+                                        banyak kamu belajar, semakin banyak
+                                        peluang usaha yang terbuka!
+                                   </li>
+                              </ul>
+                         </div>
+
+                         <div class="skor-total">
+                              🎯 Total Skor: <span id="skorTotal">0</span> /
+                              <span id="skorMaks">10</span>
+                         </div>
+
+                         <table class="rekap-table" id="rekapTable">
+                              <thead>
+                                   <tr>
+                                        <th>No</th>
+                                        <th>Soal</th>
+                                        <th>Jawaban Kamu</th>
+                                        <th>Jawaban Benar</th>
+                                        <th>Status</th>
+                                   </tr>
+                              </thead>
+                              <tbody id="rekapBody"></tbody>
+                         </table>
+
+                         <div
+                              style="
+                                   text-align: center;
+                                   margin-top: 6px;
+                                   color: #4a6a8a;
+                                   font-size: 0.7rem;
+                              "
+                         >
+                              💡
+                              <em
+                                   >Semakin banyak jawaban benar, semakin paham
+                                   kamu dengan materi lingkaran dan usaha!</em
+                              >
+                         </div>
+                         <div style="text-align: center; margin-top: 6px">
+                              <button class="btn" onclick="resetSemua()">
+                                   🔄 Reset Semua Jawaban
+                              </button>
+                         </div>
+                    </div>
+               </div>
+               <!-- ========== SLIDE 15: PENGEMBANG (SIMPLE) ========== -->
+               <div class="slide" data-slide="15">
+                    <div class="card" style="text-align: center">
+                         <h2
+                              style="
+                                   font-size: 1.6rem;
+                                   color: #0a2540;
+                                   font-weight: 700;
+                              "
+                         >
+                              PENGEMBANG
+                         </h2>
+                         <hr
+                              style="
+                                   width: 60px;
+                                   border: 2px solid #f5b342;
+                                   margin: 10px auto;
+                              "
+                         />
+
+                         <div style="margin-top: 16px; line-height: 2">
+                              <p>
+                                   <strong style="font-size: 1.1rem"
+                                        >Aan Junaidi, S.Si., Gr.</strong
+                                   >
+                              </p>
+                              <p style="color: #1a5a7a">
+                                   SMA Unggul Islam Al-Fahd <br />
+                                   Banyuasin Sumatera Selatan
+                              </p>
+                              <p>
+                                   <span
+                                        style="
+                                             font-weight: 600;
+                                             margin-top: 8px;
+                                        "
+                                        >Email:</span
+                                   >
+                                   aanjunaidi46@guru.sma.belajar.id
+                              </p>
+                         </div>
+
+                         <div>
+                              <!-- Instagram -->
+                              <a
+                                   href="https://www.instagram.com/aanjunaidi1414/"
+                                   style="
+                                        display: inline-flex;
+                                        align-items: center;
+                                        gap: 6px;
+                                        background: radial-gradient(
+                                             circle at 30% 110%,
+                                             #fdf497 0%,
+                                             #fdf497 5%,
+                                             #fd5949 45%,
+                                             #d6249f 60%,
+                                             #285aeb 90%
+                                        );
+                                        color: #fff;
+                                        padding: 8px 20px;
+                                        border-radius: 40px;
+                                        text-decoration: none;
+                                        font-weight: 600;
+                                        font-size: 0.9rem;
+                                        transition: 0.3s;
+                                   "
+                                   onmouseover="
+                                        this.style.transform = 'scale(1.05)'
+                                   "
+                                   onmouseout="
+                                        this.style.transform = 'scale(1)'
+                                   "
+                              >
+                                   📷 @aanjunaidi1414
+                              </a>
+                              <br /><br /><br /><br />
+                         </div>
+
+                         <div
+                              style="
+                                   margin-top: 24px;
+                                   font-size: 0.8rem;
+                                   color: #7a9ab5;
+                                   border-top: 1px solid #e6edf4;
+                                   padding-top: 14px;
+                              "
+                         ></div>
+
+                         <div
+                              style="
+                                   font-size: 0.75rem;
+                                   color: #7a9ab5;
+                                   border-top: 1px solid #e6edf4;
+                                   padding-top: 12px;
+                                   margin-top: 8px;
+                              "
+                         >
+                              <p>Konten ini disusun untuk lomba PNFI 2026</p>
+                         </div>
+
+                         <button
+                              class="btn"
+                              onclick="goToSlide(0)"
+                              style="margin-top: 12px"
+                         >
+                              🏠 Awal
+                         </button>
+                    </div>
+               </div>
+
+               <!-- ========== NAVIGASI ========== -->
+               <div class="slide-nav">
+                    <button
+                         class="nav-btn nav-btn-secondary"
+                         id="prevBtn"
+                         onclick="prevSlide()"
+                    >
+                         ← Sebelumnya
+                    </button>
+                    <div class="indicator">
+                         Slide <span id="slideIndex">1</span> dari
+                         <span id="slideTotal">14</span>
+                    </div>
+                    <button class="nav-btn" id="nextBtn" onclick="nextSlide()">
+                         Selanjutnya →
+                    </button>
+               </div>
+          </div>
+
+          <script>
+               // ============================================================
+               // 1. NAVIGASI
+               // ============================================================
+               let currentSlide = 0;
+               const slides = document.querySelectorAll('.slide');
+               const totalSlides = slides.length;
+               document.getElementById('slideTotal').textContent = totalSlides;
+
+               function goToSlide(index) {
+                    if (index < 0 || index >= totalSlides) return;
+                    slides.forEach((s, i) => {
+                         s.classList.toggle('active', i === index);
+                    });
+                    currentSlide = index;
+                    document.getElementById('slideIndex').textContent =
+                         index + 1;
+                    document.getElementById('prevBtn').disabled = index === 0;
+                    document.getElementById('nextBtn').disabled =
+                         index === totalSlides - 1;
+                    document.getElementById('slideContent').scrollTop = 0;
+                    if (index === totalSlides - 1) tampilkanRekap();
+               }
+
+               function nextSlide() {
+                    if (currentSlide < totalSlides - 1)
+                         goToSlide(currentSlide + 1);
+               }
+
+               function prevSlide() {
+                    if (currentSlide > 0) goToSlide(currentSlide - 1);
+               }
+
+               document.addEventListener('keydown', function (e) {
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                         e.preventDefault();
+                         nextSlide();
+                    }
+                    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                         e.preventDefault();
+                         prevSlide();
+                    }
+               });
+
+               goToSlide(0);
+
+               // ============================================================
+               // 2. ASESMEN AWAL
+               // ============================================================
+               function cekPrasyarat() {
+                    const selects =
+                         document.querySelectorAll('.soal-prasyarat');
+                    let benar = 0,
+                         total = selects.length;
+                    selects.forEach((sel) => {
+                         if (sel.value === sel.dataset.benar) benar++;
+                    });
+                    const fb = document.getElementById('feedbackPrasyarat');
+                    if (benar === total) {
+                         fb.textContent =
+                              '✅ Luar biasa! Kamu sudah siap belajar lingkaran. Nilai: ' +
+                              benar +
+                              '/' +
+                              total;
+                         fb.className = 'feedback correct';
+                    } else if (benar >= total - 1) {
+                         fb.textContent =
+                              '✅ Bagus! Hampir sempurna. Nilai: ' +
+                              benar +
+                              '/' +
+                              total +
+                              '. Kamu siap melanjutkan.';
+                         fb.className = 'feedback correct';
+                    } else if (benar >= Math.floor(total / 2)) {
+                         fb.textContent =
+                              '⚠️ Cukup baik. Nilai: ' +
+                              benar +
+                              '/' +
+                              total +
+                              '. Perlu review ulang prasyarat.';
+                         fb.className = 'feedback wrong';
+                    } else {
+                         fb.textContent =
+                              '❌ Masih perlu belajar lebih banyak. Nilai: ' +
+                              benar +
+                              '/' +
+                              total +
+                              '. Pelajari bangun datar dan sudut!';
+                         fb.className = 'feedback wrong';
+                    }
+               }
+               window.cekPrasyarat = cekPrasyarat;
+
+               // ============================================================
+               // 3. DEFINISI
+               // ============================================================
+               const canvasDef = document.getElementById('canvasDefinisi');
+               const ctxDef = canvasDef.getContext('2d');
+               const jariDefSlider =
+                    document.getElementById('jariDefinisiSlider');
+               const jumlahTitikSlider =
+                    document.getElementById('jumlahTitikSlider');
+               const jariDefLabel =
+                    document.getElementById('jariDefinisiLabel');
+               const jumlahTitikLabel =
+                    document.getElementById('jumlahTitikLabel');
+               const defR = document.getElementById('defR'),
+                    defN = document.getElementById('defN');
+               const defJarak = document.getElementById('defJarak'),
+                    defR2 = document.getElementById('defR2');
+
+               let rDef = 80,
+                    nDef = 12;
+
+               function drawDefinisi() {
+                    const cx = canvasDef.width / 2,
+                         cy = canvasDef.height / 2;
+                    ctxDef.clearRect(0, 0, canvasDef.width, canvasDef.height);
+                    ctxDef.beginPath();
+                    ctxDef.arc(cx, cy, rDef, 0, 2 * Math.PI);
+                    ctxDef.strokeStyle = '#ffffff';
+                    ctxDef.lineWidth = 2.5;
+                    // ctxDef.setLineDash([8, 6]);//
+                    ctxDef.stroke();
+                    // ctxDef.setLineDash([]);//
+                    for (let i = 0; i < nDef; i++) {
+                         const angle = (i / nDef) * 2 * Math.PI - Math.PI / 2;
+                         const x = cx + rDef * Math.cos(angle),
+                              y = cy + rDef * Math.sin(angle);
+                         ctxDef.beginPath();
+                         ctxDef.arc(x, y, 2, 0, 2 * Math.PI);
+                         ctxDef.fillStyle = '#000000';
+                         ctxDef.fill();
+                         if (i === 0) {
+                              ctxDef.beginPath();
+                              ctxDef.moveTo(cx, cy);
+                              ctxDef.lineTo(x, y);
+                              ctxDef.strokeStyle = 'rgba(10,37,64,0.15)';
+                              ctxDef.lineWidth = 1;
+                              ctxDef.setLineDash([3, 3]);
+                              ctxDef.stroke();
+                              ctxDef.setLineDash([]);
+                         }
+                    }
+                    ctxDef.beginPath();
+                    ctxDef.arc(cx, cy, 6, 0, 2 * Math.PI);
+                    ctxDef.fillStyle = '#c0392b';
+                    ctxDef.fill();
+                    ctxDef.fillStyle = '#0a2540';
+                    ctxDef.font = 'bold 14px Segoe UI';
+                    ctxDef.textAlign = 'center';
+                    ctxDef.textBaseline = 'bottom';
+                    ctxDef.fillText('O', cx, cy - 8);
+                    ctxDef.fillStyle = '#0a2540';
+                    ctxDef.font = 'bold 12px Segoe UI';
+                    ctxDef.textAlign = 'left';
+                    ctxDef.textBaseline = 'top';
+                    ctxDef.fillText('r = ' + rDef, 8, 8);
+                    defR.textContent = rDef;
+                    defN.textContent = nDef;
+                    defJarak.innerHTML = rDef + ' <small>satuan</small>';
+                    defR2.textContent = rDef;
+               }
+
+               function updateDefinisi() {
+                    rDef = parseInt(jariDefSlider.value);
+                    nDef = parseInt(jumlahTitikSlider.value);
+                    jariDefLabel.textContent = rDef;
+                    jumlahTitikLabel.textContent = nDef;
+                    drawDefinisi();
+               }
+               jariDefSlider.addEventListener('input', updateDefinisi);
+               jumlahTitikSlider.addEventListener('input', updateDefinisi);
+               updateDefinisi();
+
+               // ============================================================
+               // 4. UNSUR + PERHITUNGAN
+               // ============================================================
+               const canvasUnsur = document.getElementById('canvasUnsur');
+               const ctxUnsur = canvasUnsur.getContext('2d');
+               const jariUnsurSlider =
+                    document.getElementById('jariUnsurSlider');
+               const jariUnsurLabel = document.getElementById('jariUnsurLabel');
+               const unsurDeskripsi = document.getElementById('unsurDeskripsi');
+               const unsurR = document.getElementById('unsurR'),
+                    unsurD = document.getElementById('unsurD');
+               const unsurK = document.getElementById('unsurK'),
+                    unsurL = document.getElementById('unsurL');
+               const rumusKeliling = document.getElementById('rumusKeliling');
+               const rumusLuas = document.getElementById('rumusLuas');
+
+               let modeUnsur = 'center',
+                    rUnsur = 100;
+               const cxU = canvasUnsur.width / 2,
+                    cyU = canvasUnsur.height / 2;
+               const deskripsiMap = {
+                    center: '<strong>Titik Pusat (O)</strong>: Titik yang berada tepat di tengah-tengah lingkaran. Semua titik pada lingkaran memiliki jarak yang sama ke titik pusat.',
+                    radius: '<strong>Jari-jari (r)</strong>: Garis dari titik pusat ke sembarang titik pada lingkaran. Semua jari-jari sama panjang.',
+                    diameter:
+                         '<strong>Diameter (d)</strong>: Garis lurus yang melalui titik pusat dan menghubungkan dua titik pada lingkaran. d = 2r.',
+                    chord: '<strong>Busur dan Tali Busur</strong>: <em>Busur</em> adalah garis lengkung (merah). <em>Tali busur</em> adalah garis lurus yang menghubungkan dua titik pada lingkaran (biru).',
+                    apothem: '<strong>Apotema</strong>: Garis tegak lurus dari titik pusat ke tali busur. Membagi tali busur menjadi dua bagian sama panjang.',
+                    segment: '<strong>Tembereng</strong>: Daerah di dalam lingkaran yang dibatasi oleh busur dan tali busur (diarsir kuning).',
+               };
+
+               function updateRumusUnsur(r) {
+                    let pi, piText;
+                    if (r % 7 === 0) {
+                         pi = 22 / 7;
+                         piText = '22/7';
+                    } else {
+                         pi = 3.14;
+                         piText = '3,14';
+                    }
+                    const keliling = 2 * pi * r;
+                    const luas = pi * r * r;
+                    rumusKeliling.innerHTML = `K = 2 × π × r<br>= 2 × ${piText} × ${r}<br>= ${keliling.toFixed(0)} satuan`;
+                    rumusLuas.innerHTML = `L = π × r²<br>= ${piText} × ${r}²<br>= ${luas.toFixed(0)} satuan²`;
+                    unsurK.innerHTML =
+                         keliling.toFixed(0) + ' <small>satuan</small>';
+                    unsurL.innerHTML =
+                         luas.toFixed(0) + ' <small>satuan²</small>';
+               }
+
+               function drawUnsur() {
+                    const r = rUnsur;
+                    ctxUnsur.clearRect(
+                         0,
+                         0,
+                         canvasUnsur.width,
+                         canvasUnsur.height
+                    );
+                    ctxUnsur.beginPath();
+                    ctxUnsur.arc(cxU, cyU, r, 0, 2 * Math.PI);
+                    ctxUnsur.strokeStyle = '#2c3e50';
+                    ctxUnsur.lineWidth = 2.5;
+                    ctxUnsur.stroke();
+
+                    const angle1 = -Math.PI / 4,
+                         angle2 = Math.PI / 3;
+                    const p1 = {
+                         x: cxU + r * Math.cos(angle1),
+                         y: cyU + r * Math.sin(angle1),
+                    };
+                    const p2 = {
+                         x: cxU + r * Math.cos(angle2),
+                         y: cyU + r * Math.sin(angle2),
+                    };
+                    const pD1 = {
+                         x: cxU + r * Math.cos(angle1),
+                         y: cyU + r * Math.sin(angle1),
+                    };
+                    const pD2 = {
+                         x: cxU + r * Math.cos(angle1 + Math.PI),
+                         y: cyU + r * Math.sin(angle1 + Math.PI),
+                    };
+                    const dx = p2.x - p1.x,
+                         dy = p2.y - p1.y;
+                    const len = Math.sqrt(dx * dx + dy * dy);
+                    let apothemPoint = { x: cxU, y: cyU };
+                    if (len > 0) {
+                         const t =
+                              ((cxU - p1.x) * dx + (cyU - p1.y) * dy) /
+                              (len * len);
+                         apothemPoint = { x: p1.x + t * dx, y: p1.y + t * dy };
+                    }
+
+                    ctxUnsur.beginPath();
+                    ctxUnsur.arc(cxU, cyU, 6, 0, 2 * Math.PI);
+                    ctxUnsur.fillStyle = '#c0392b';
+                    ctxUnsur.fill();
+                    ctxUnsur.fillStyle = '#2c3e50';
+                    ctxUnsur.font = 'bold 14px Segoe UI';
+                    ctxUnsur.textAlign = 'center';
+                    ctxUnsur.textBaseline = 'bottom';
+                    ctxUnsur.fillText('O', cxU, cyU - 8);
+
+                    if (modeUnsur === 'radius') {
+                         ctxUnsur.beginPath();
+                         ctxUnsur.moveTo(cxU, cyU);
+                         ctxUnsur.lineTo(p1.x, p1.y);
+                         ctxUnsur.strokeStyle = '#e67e22';
+                         ctxUnsur.lineWidth = 3;
+                         ctxUnsur.stroke();
+                         ctxUnsur.beginPath();
+                         ctxUnsur.arc(p1.x, p1.y, 5, 0, 2 * Math.PI);
+                         ctxUnsur.fillStyle = '#e67e22';
+                         ctxUnsur.fill();
+                         ctxUnsur.fillStyle = '#e67e22';
+                         ctxUnsur.textBaseline = 'bottom';
+                         ctxUnsur.fillText('A', p1.x, p1.y - 8);
+                         ctxUnsur.fillStyle = '#e67e22';
+                         ctxUnsur.font = 'bold 12px Segoe UI';
+                         ctxUnsur.textBaseline = 'middle';
+                         ctxUnsur.fillText(
+                              'r = ' + r,
+                              (cxU + p1.x) / 2 - 15,
+                              (cyU + p1.y) / 2 - 8
+                         );
+                    } else if (modeUnsur === 'diameter') {
+                         ctxUnsur.beginPath();
+                         ctxUnsur.moveTo(pD1.x, pD1.y);
+                         ctxUnsur.lineTo(pD2.x, pD2.y);
+                         ctxUnsur.strokeStyle = '#2980b9';
+                         ctxUnsur.lineWidth = 3;
+                         ctxUnsur.stroke();
+                         ctxUnsur.beginPath();
+                         ctxUnsur.arc(pD1.x, pD1.y, 5, 0, 2 * Math.PI);
+                         ctxUnsur.fillStyle = '#2980b9';
+                         ctxUnsur.fill();
+                         ctxUnsur.fillStyle = '#2980b9';
+                         ctxUnsur.textBaseline = 'bottom';
+                         ctxUnsur.fillText('B', pD1.x, pD1.y - 8);
+                         ctxUnsur.beginPath();
+                         ctxUnsur.arc(pD2.x, pD2.y, 5, 0, 2 * Math.PI);
+                         ctxUnsur.fillStyle = '#2980b9';
+                         ctxUnsur.fill();
+                         ctxUnsur.fillStyle = '#2980b9';
+                         ctxUnsur.textBaseline = 'bottom';
+                         ctxUnsur.fillText('C', pD2.x, pD2.y - 8);
+                         ctxUnsur.fillStyle = '#2980b9';
+                         ctxUnsur.font = 'bold 12px Segoe UI';
+                         ctxUnsur.textBaseline = 'middle';
+                         ctxUnsur.fillText('d = ' + 2 * r, cxU, cyU + 28);
+                    } else if (modeUnsur === 'chord') {
+                         const startA = Math.min(angle1, angle2),
+                              endA = Math.max(angle1, angle2);
+                         ctxUnsur.beginPath();
+                         ctxUnsur.arc(cxU, cyU, r, startA, endA);
+                         ctxUnsur.strokeStyle = '#e74c3c';
+                         ctxUnsur.lineWidth = 4;
+                         ctxUnsur.stroke();
+                         ctxUnsur.fillStyle = '#e74c3c';
+                         ctxUnsur.font = 'bold 11px Segoe UI';
+                         ctxUnsur.textBaseline = 'middle';
+                         const midA = (startA + endA) / 2;
+                         ctxUnsur.fillText(
+                              'Busur',
+                              cxU + (r + 22) * Math.cos(midA),
+                              cyU + (r + 22) * Math.sin(midA)
+                         );
+                         ctxUnsur.beginPath();
+                         ctxUnsur.moveTo(p1.x, p1.y);
+                         ctxUnsur.lineTo(p2.x, p2.y);
+                         ctxUnsur.strokeStyle = '#3498db';
+                         ctxUnsur.lineWidth = 3;
+                         ctxUnsur.stroke();
+                         ctxUnsur.fillStyle = '#3498db';
+                         ctxUnsur.font = 'bold 11px Segoe UI';
+                         ctxUnsur.textBaseline = 'bottom';
+                         ctxUnsur.fillText(
+                              'Tali Busur',
+                              (p1.x + p2.x) / 2,
+                              (p1.y + p2.y) / 2 - 8
+                         );
+                    } else if (modeUnsur === 'apothem') {
+                         ctxUnsur.beginPath();
+                         ctxUnsur.moveTo(p1.x, p1.y);
+                         ctxUnsur.lineTo(p2.x, p2.y);
+                         ctxUnsur.strokeStyle = '#8e44ad';
+                         ctxUnsur.lineWidth = 2;
+                         ctxUnsur.stroke();
+                         ctxUnsur.beginPath();
+                         ctxUnsur.moveTo(cxU, cyU);
+                         ctxUnsur.lineTo(apothemPoint.x, apothemPoint.y);
+                         ctxUnsur.strokeStyle = '#e67e22';
+                         ctxUnsur.lineWidth = 3;
+                         ctxUnsur.setLineDash([5, 4]);
+                         ctxUnsur.stroke();
+                         ctxUnsur.setLineDash([]);
+                         const dxA = apothemPoint.x - cxU,
+                              dyA = apothemPoint.y - cyU;
+                         const lenA = Math.sqrt(dxA * dxA + dyA * dyA);
+                         if (lenA > 10) {
+                              const ux = (dxA / lenA) * 8,
+                                   uy = (dyA / lenA) * 8;
+                              const vx = (-dyA / lenA) * 8,
+                                   vy = (dxA / lenA) * 8;
+                              ctxUnsur.beginPath();
+                              ctxUnsur.moveTo(
+                                   apothemPoint.x + ux + vx,
+                                   apothemPoint.y + uy + vy
+                              );
+                              ctxUnsur.lineTo(
+                                   apothemPoint.x + ux,
+                                   apothemPoint.y + uy
+                              );
+                              ctxUnsur.lineTo(
+                                   apothemPoint.x + vx,
+                                   apothemPoint.y + vy
+                              );
+                              ctxUnsur.strokeStyle = '#e67e22';
+                              ctxUnsur.lineWidth = 2;
+                              ctxUnsur.stroke();
+                         }
+                         ctxUnsur.fillStyle = '#e67e22';
+                         ctxUnsur.font = 'bold 11px Segoe UI';
+                         ctxUnsur.textBaseline = 'bottom';
+                         ctxUnsur.fillText(
+                              'Apotema',
+                              (cxU + apothemPoint.x) / 2 - 18,
+                              (cyU + apothemPoint.y) / 2 - 8
+                         );
+                         ctxUnsur.fillStyle = '#8e44ad';
+                         ctxUnsur.textBaseline = 'bottom';
+                         ctxUnsur.fillText(
+                              'Tali Busur',
+                              (p1.x + p2.x) / 2,
+                              (p1.y + p2.y) / 2 - 18
+                         );
+                    } else if (modeUnsur === 'segment') {
+                         const startA = Math.min(angle1, angle2),
+                              endA = Math.max(angle1, angle2);
+                         ctxUnsur.beginPath();
+                         ctxUnsur.moveTo(p1.x, p1.y);
+                         ctxUnsur.arc(cxU, cyU, r, startA, endA);
+                         ctxUnsur.closePath();
+                         ctxUnsur.fillStyle = 'rgba(241, 196, 15, 0.5)';
+                         ctxUnsur.fill();
+                         ctxUnsur.strokeStyle = '#f1c40f';
+                         ctxUnsur.lineWidth = 2;
+                         ctxUnsur.stroke();
+                         ctxUnsur.fillStyle = '#f1c40f';
+                         ctxUnsur.font = 'bold 12px Segoe UI';
+                         ctxUnsur.textBaseline = 'middle';
+                         const midA2 = (startA + endA) / 2;
+                         ctxUnsur.fillText(
+                              'Tembereng',
+                              cxU + r * 0.6 * Math.cos(midA2),
+                              cyU + r * 0.6 * Math.sin(midA2)
+                         );
+                         ctxUnsur.beginPath();
+                         ctxUnsur.moveTo(p1.x, p1.y);
+                         ctxUnsur.lineTo(p2.x, p2.y);
+                         ctxUnsur.strokeStyle = '#2c3e50';
+                         ctxUnsur.lineWidth = 1.5;
+                         ctxUnsur.setLineDash([4, 4]);
+                         ctxUnsur.stroke();
+                         ctxUnsur.setLineDash([]);
+                    }
+
+                    ctxUnsur.fillStyle = '#2c3e50';
+                    ctxUnsur.font = 'bold 12px Segoe UI';
+                    ctxUnsur.textAlign = 'left';
+                    ctxUnsur.textBaseline = 'top';
+                    ctxUnsur.fillText('r = ' + r, 8, 8);
+                    unsurR.textContent = r;
+                    unsurD.textContent = 2 * r;
+                    updateRumusUnsur(r);
+               }
+
+               function updateUnsur() {
+                    rUnsur = parseInt(jariUnsurSlider.value);
+                    jariUnsurLabel.textContent = rUnsur;
+                    drawUnsur();
+               }
+               document.querySelectorAll('.btn-mode').forEach((btn) => {
+                    btn.addEventListener('click', function () {
+                         document
+                              .querySelectorAll('.btn-mode')
+                              .forEach((b) =>
+                                   b.classList.remove('active-mode')
+                              );
+                         this.classList.add('active-mode');
+                         modeUnsur = this.dataset.mode;
+                         unsurDeskripsi.innerHTML =
+                              deskripsiMap[modeUnsur] || '';
+                         drawUnsur();
+                    });
+               });
+               jariUnsurSlider.addEventListener('input', updateUnsur);
+               updateUnsur();
+
+               // ============================================================
+               // 5. SUDUT
+               // ============================================================
+               const canvasSudut = document.getElementById('canvasSudut');
+               const ctxSudut = canvasSudut.getContext('2d');
+               const sudutPusatSlider =
+                    document.getElementById('sudutPusatSlider');
+               const posisiCSlider = document.getElementById('posisiCSlider');
+               const jariSudutSlider =
+                    document.getElementById('jariSudutSlider');
+               const sudutPusatLabel =
+                    document.getElementById('sudutPusatLabel');
+               const posisiCLabel = document.getElementById('posisiCLabel');
+               const jariSudutLabel = document.getElementById('jariSudutLabel');
+               const nilaiSudutPusat =
+                    document.getElementById('nilaiSudutPusat');
+               const nilaiSudutKeliling =
+                    document.getElementById('nilaiSudutKeliling');
+               const nilaiHubungan = document.getElementById('nilaiHubungan');
+
+               let sudutPusat = 80,
+                    posisiC = 0,
+                    jariSudut = 100;
+
+               function drawSudut() {
+                    const cx = canvasSudut.width / 2,
+                         cy = canvasSudut.height / 2 - 5;
+                    const r = jariSudut * 1.3;
+                    const start = -Math.PI / 4;
+                    const end = start + (sudutPusat * Math.PI) / 180;
+                    const A = {
+                         x: cx + r * Math.cos(start),
+                         y: cy + r * Math.sin(start),
+                    };
+                    const B = {
+                         x: cx + r * Math.cos(end),
+                         y: cy + r * Math.sin(end),
+                    };
+                    const midArc = (start + end) / 2;
+                    const opp = midArc + Math.PI + (posisiC * Math.PI) / 180;
+                    const C = {
+                         x: cx + r * Math.cos(opp),
+                         y: cy + r * Math.sin(opp),
+                    };
+
+                    ctxSudut.clearRect(
+                         0,
+                         0,
+                         canvasSudut.width,
+                         canvasSudut.height
+                    );
+                    ctxSudut.beginPath();
+                    ctxSudut.arc(cx, cy, r, 0, 2 * Math.PI);
+                    ctxSudut.strokeStyle = '#2c3e50';
+                    ctxSudut.lineWidth = 2.5;
+                    ctxSudut.stroke();
+                    ctxSudut.beginPath();
+                    ctxSudut.arc(cx, cy, r, start, end);
+                    ctxSudut.strokeStyle = '#e74c3c';
+                    ctxSudut.lineWidth = 4;
+                    ctxSudut.stroke();
+                    ctxSudut.beginPath();
+                    ctxSudut.moveTo(cx, cy);
+                    ctxSudut.lineTo(A.x, A.y);
+                    ctxSudut.strokeStyle = '#34495e';
+                    ctxSudut.lineWidth = 1.8;
+                    ctxSudut.stroke();
+                    ctxSudut.beginPath();
+                    ctxSudut.moveTo(cx, cy);
+                    ctxSudut.lineTo(B.x, B.y);
+                    ctxSudut.stroke();
+                    ctxSudut.beginPath();
+                    ctxSudut.moveTo(A.x, A.y);
+                    ctxSudut.lineTo(C.x, C.y);
+                    ctxSudut.lineTo(B.x, B.y);
+                    ctxSudut.strokeStyle = '#2980b9';
+                    ctxSudut.lineWidth = 2;
+                    ctxSudut.stroke();
+
+                    const drawPt = (x, y, label, col) => {
+                         ctxSudut.beginPath();
+                         ctxSudut.arc(x, y, 5, 0, 2 * Math.PI);
+                         ctxSudut.fillStyle = col;
+                         ctxSudut.fill();
+                         ctxSudut.fillStyle = '#1a2a3a';
+                         ctxSudut.font = 'bold 14px Segoe UI';
+                         ctxSudut.textAlign = 'center';
+                         ctxSudut.textBaseline = 'bottom';
+                         ctxSudut.fillText(label, x, y - 8);
+                    };
+                    drawPt(cx, cy, 'O', '#c0392b');
+                    drawPt(A.x, A.y, 'A', '#2c3e50');
+                    drawPt(B.x, B.y, 'B', '#2c3e50');
+                    drawPt(C.x, C.y, 'C', '#2c3e50');
+
+                    ctxSudut.beginPath();
+                    ctxSudut.arc(cx, cy, 30, start, end);
+                    ctxSudut.strokeStyle = '#e74c3c';
+                    ctxSudut.lineWidth = 2.5;
+                    ctxSudut.stroke();
+                    ctxSudut.fillStyle = '#e74c3c';
+                    ctxSudut.font = 'bold 12px Segoe UI';
+                    ctxSudut.textAlign = 'center';
+                    ctxSudut.textBaseline = 'middle';
+                    const mid = (start + end) / 2;
+                    ctxSudut.fillText(
+                         sudutPusat + '°',
+                         cx + 38 * Math.cos(mid),
+                         cy + 38 * Math.sin(mid)
+                    );
+
+                    const angleAC = Math.atan2(A.y - C.y, A.x - C.x);
+                    const angleBC = Math.atan2(B.y - C.y, B.x - C.x);
+                    ctxSudut.beginPath();
+                    ctxSudut.arc(C.x, C.y, 25, angleAC, angleBC);
+                    ctxSudut.strokeStyle = '#2980b9';
+                    ctxSudut.lineWidth = 2.5;
+                    ctxSudut.stroke();
+                    const midC = (angleAC + angleBC) / 2;
+                    const inscribed = sudutPusat / 2;
+                    ctxSudut.fillStyle = '#2980b9';
+                    ctxSudut.fillText(
+                         inscribed.toFixed(1) + '°',
+                         C.x + 32 * Math.cos(midC),
+                         C.y + 32 * Math.sin(midC)
+                    );
+
+                    const arcLabelX = cx + (r + 24) * Math.cos(midArc);
+                    const arcLabelY = cy + (r + 24) * Math.sin(midArc);
+                    ctxSudut.fillStyle = '#c0392b';
+                    ctxSudut.font = 'bold 11px Segoe UI';
+                    ctxSudut.textAlign = 'center';
+                    ctxSudut.textBaseline = 'middle';
+                    ctxSudut.fillText('Busur', arcLabelX, arcLabelY);
+
+                    nilaiSudutPusat.textContent = sudutPusat + '°';
+                    nilaiSudutKeliling.textContent = inscribed.toFixed(1) + '°';
+                    nilaiHubungan.textContent = 'θ = 2α';
+               }
+
+               function updateSudut() {
+                    sudutPusat = parseFloat(sudutPusatSlider.value);
+                    posisiC = parseFloat(posisiCSlider.value);
+                    jariSudut = parseFloat(jariSudutSlider.value);
+                    sudutPusatLabel.textContent = sudutPusat;
+                    posisiCLabel.textContent = posisiC;
+                    jariSudutLabel.textContent = jariSudut;
+                    drawSudut();
+               }
+               sudutPusatSlider.addEventListener('input', updateSudut);
+               posisiCSlider.addEventListener('input', updateSudut);
+               jariSudutSlider.addEventListener('input', updateSudut);
+               updateSudut();
+
+               // ============================================================
+               // 6. JURING & BUSUR
+               // ============================================================
+               const canvasJuring = document.getElementById('canvasJuring');
+               const ctxJuring = canvasJuring.getContext('2d');
+               const jariJuringSlider =
+                    document.getElementById('jariJuringSlider');
+               const sudutJuringSlider =
+                    document.getElementById('sudutJuringSlider');
+               const jariJuringLabel =
+                    document.getElementById('jariJuringLabel');
+               const sudutJuringLabel =
+                    document.getElementById('sudutJuringLabel');
+               const luasJuring = document.getElementById('luasJuring');
+               const panjangBusur = document.getElementById('panjangBusur');
+               const juringR = document.getElementById('juringR');
+
+               function drawJuring() {
+                    const r = parseFloat(jariJuringSlider.value);
+                    const theta = parseFloat(sudutJuringSlider.value);
+                    const cx = canvasJuring.width / 2,
+                         cy = canvasJuring.height / 2;
+                    const scale = Math.min(r * 2.2, 200);
+                    const startAngle = -Math.PI / 2;
+                    const endAngle = startAngle + (theta * Math.PI) / 180;
+
+                    ctxJuring.clearRect(
+                         0,
+                         0,
+                         canvasJuring.width,
+                         canvasJuring.height
+                    );
+                    ctxJuring.beginPath();
+                    ctxJuring.arc(cx, cy, scale, 0, 2 * Math.PI);
+                    ctxJuring.strokeStyle = '#2c3e50';
+                    ctxJuring.lineWidth = 1.5;
+                    ctxJuring.setLineDash([4, 4]);
+                    ctxJuring.stroke();
+                    ctxJuring.setLineDash([]);
+
+                    ctxJuring.beginPath();
+                    ctxJuring.moveTo(cx, cy);
+                    ctxJuring.arc(cx, cy, scale, startAngle, endAngle);
+                    ctxJuring.closePath();
+                    ctxJuring.fillStyle = 'rgba(241, 196, 15, 0.3)';
+                    ctxJuring.fill();
+                    ctxJuring.strokeStyle = '#f1c40f';
+                    ctxJuring.lineWidth = 2.5;
+                    ctxJuring.stroke();
+
+                    ctxJuring.beginPath();
+                    ctxJuring.moveTo(cx, cy);
+                    ctxJuring.lineTo(
+                         cx + scale * Math.cos(startAngle),
+                         cy + scale * Math.sin(startAngle)
+                    );
+                    ctxJuring.strokeStyle = '#e67e22';
+                    ctxJuring.lineWidth = 2;
+                    ctxJuring.stroke();
+                    ctxJuring.beginPath();
+                    ctxJuring.moveTo(cx, cy);
+                    ctxJuring.lineTo(
+                         cx + scale * Math.cos(endAngle),
+                         cy + scale * Math.sin(endAngle)
+                    );
+                    ctxJuring.stroke();
+
+                    ctxJuring.beginPath();
+                    ctxJuring.arc(cx, cy, scale, startAngle, endAngle);
+                    ctxJuring.strokeStyle = '#c0392b';
+                    ctxJuring.lineWidth = 4;
+                    ctxJuring.stroke();
+
+                    ctxJuring.fillStyle = '#2c3e50';
+                    ctxJuring.font = 'bold 14px Segoe UI';
+                    ctxJuring.textAlign = 'center';
+                    ctxJuring.textBaseline = 'bottom';
+                    ctxJuring.fillText('Pusat', cx, cy - 6);
+
+                    const midAngle = (startAngle + endAngle) / 2;
+                    ctxJuring.fillStyle = '#e67e22';
+                    ctxJuring.font = 'bold 12px Segoe UI';
+                    ctxJuring.textBaseline = 'middle';
+                    ctxJuring.fillText(
+                         'r = ' + r + ' cm',
+                         cx + scale * 0.6 * Math.cos(midAngle),
+                         cy + scale * 0.6 * Math.sin(midAngle)
+                    );
+                    ctxJuring.fillStyle = '#c0392b';
+                    ctxJuring.fillText(
+                         'θ = ' + theta + '°',
+                         cx + scale * 0.35 * Math.cos(midAngle),
+                         cy + scale * 0.35 * Math.sin(midAngle)
+                    );
+                    ctxJuring.fillStyle = '#c0392b';
+                    ctxJuring.font = 'bold 11px Segoe UI';
+                    ctxJuring.fillText(
+                         'Busur',
+                         cx + (scale + 20) * Math.cos(midAngle),
+                         cy + (scale + 20) * Math.sin(midAngle)
+                    );
+
+                    const luas = (theta / 360) * Math.PI * r * r;
+                    const busur = (theta / 360) * 2 * Math.PI * r;
+                    luasJuring.innerHTML =
+                         luas.toFixed(1) + ' <small>cm²</small>';
+                    panjangBusur.innerHTML =
+                         busur.toFixed(1) + ' <small>cm</small>';
+                    juringR.innerHTML = r + ' <small>cm</small>';
+               }
+
+               function updateJuring() {
+                    const r = parseFloat(jariJuringSlider.value);
+                    const theta = parseFloat(sudutJuringSlider.value);
+                    jariJuringLabel.textContent = r;
+                    sudutJuringLabel.textContent = theta;
+                    drawJuring();
+               }
+               jariJuringSlider.addEventListener('input', updateJuring);
+               sudutJuringSlider.addEventListener('input', updateJuring);
+               updateJuring();
+
+               // ============================================================
+               // 7. ROK PAYUNG
+               // ============================================================
+               const canvasRok = document.getElementById('canvasRok');
+               const ctxRok = canvasRok.getContext('2d');
+               const jariRokSlider = document.getElementById('jariRokSlider');
+               const sudutRokSlider = document.getElementById('sudutRokSlider');
+               const jariRokLabel = document.getElementById('jariRokLabel');
+               const sudutRokLabel = document.getElementById('sudutRokLabel');
+               const rokR = document.getElementById('rokR');
+               const rokSudut = document.getElementById('rokSudut');
+               const rokLuas = document.getElementById('rokLuas');
+               const rokBusur = document.getElementById('rokBusur');
+               const rokR2 = document.getElementById('rokR2');
+               const rokSudut2 = document.getElementById('rokSudut2');
+               const rokLuas2 = document.getElementById('rokLuas2');
+
+               let rRok = 80,
+                    thetaRok = 120;
+
+               function drawRok() {
+                    const cx = canvasRok.width / 2,
+                         cy = canvasRok.height / 2;
+                    const scale = Math.min(rRok * 2.2, 200);
+                    const startAngle = -(22 / 7) / 2;
+                    const endAngle = startAngle + (thetaRok * (22 / 7)) / 180;
+
+                    ctxRok.clearRect(0, 0, canvasRok.width, canvasRok.height);
+                    ctxRok.beginPath();
+                    ctxRok.arc(cx, cy, scale, 0, 2 * (22 / 7));
+                    ctxRok.strokeStyle = '#2c3e50';
+                    ctxRok.lineWidth = 1.5;
+                    ctxRok.setLineDash([4, 4]);
+                    ctxRok.stroke();
+                    ctxRok.setLineDash([]);
+
+                    ctxRok.beginPath();
+                    ctxRok.moveTo(cx, cy);
+                    ctxRok.arc(cx, cy, scale, startAngle, endAngle);
+                    ctxRok.closePath();
+                    ctxRok.fillStyle = 'rgba(241, 196, 15, 0.4)';
+                    ctxRok.fill();
+                    ctxRok.strokeStyle = '#f1c40f';
+                    ctxRok.lineWidth = 2.5;
+                    ctxRok.stroke();
+
+                    ctxRok.beginPath();
+                    ctxRok.moveTo(cx, cy);
+                    ctxRok.lineTo(
+                         cx + scale * Math.cos(startAngle),
+                         cy + scale * Math.sin(startAngle)
+                    );
+                    ctxRok.strokeStyle = '#e67e22';
+                    ctxRok.lineWidth = 2;
+                    ctxRok.stroke();
+                    ctxRok.beginPath();
+                    ctxRok.moveTo(cx, cy);
+                    ctxRok.lineTo(
+                         cx + scale * Math.cos(endAngle),
+                         cy + scale * Math.sin(endAngle)
+                    );
+                    ctxRok.stroke();
+
+                    ctxRok.beginPath();
+                    ctxRok.arc(cx, cy, scale, startAngle, endAngle);
+                    ctxRok.strokeStyle = '#c0392b';
+                    ctxRok.lineWidth = 4;
+                    ctxRok.stroke();
+
+                    ctxRok.fillStyle = '#2c3e50';
+                    ctxRok.font = 'bold 14px Segoe UI';
+                    ctxRok.textAlign = 'center';
+                    ctxRok.textBaseline = 'bottom';
+                    ctxRok.fillText('Pusat Rok', cx, cy - 6);
+
+                    const midAngle = (startAngle + endAngle) / 2;
+                    ctxRok.fillStyle = '#e67e22';
+                    ctxRok.font = 'bold 12px Segoe UI';
+                    ctxRok.textBaseline = 'middle';
+                    ctxRok.fillText(
+                         'r = ' + rRok + ' cm',
+                         cx + scale * 0.6 * Math.cos(midAngle),
+                         cy + scale * 0.6 * Math.sin(midAngle)
+                    );
+                    ctxRok.fillStyle = '#c0392b';
+                    ctxRok.fillText(
+                         'θ = ' + thetaRok + '°',
+                         cx + scale * 0.35 * Math.cos(midAngle),
+                         cy + scale * 0.35 * Math.sin(midAngle)
+                    );
+                    ctxRok.fillStyle = '#c0392b';
+                    ctxRok.font = 'bold 11px Segoe UI';
+                    ctxRok.fillText(
+                         'Bawah Rok',
+                         cx + (scale + 20) * Math.cos(midAngle),
+                         cy + (scale + 20) * Math.sin(midAngle)
+                    );
+
+                    ctxRok.fillStyle = '#e67e22';
+                    ctxRok.font = '28px Segoe UI';
+                    ctxRok.textAlign = 'center';
+                    ctxRok.textBaseline = 'bottom';
+                    ctxRok.fillText(
+                         '👗',
+                         cx + (scale + 48) * Math.cos(midAngle + 0.2),
+                         cy + (scale + 48) * Math.sin(midAngle + 0.2)
+                    );
+
+                    const luas = (thetaRok / 360) * (22 / 7) * rRok * rRok;
+                    const busur = (thetaRok / 360) * 2 * (22 / 7) * rRok;
+                    rokR.innerHTML = rRok + ' <small>cm</small>';
+                    rokSudut.textContent = thetaRok + '°';
+                    rokLuas.innerHTML = luas.toFixed(1) + ' <small>cm²</small>';
+                    rokBusur.innerHTML =
+                         busur.toFixed(1) + ' <small>cm</small>';
+                    rokR2.innerHTML = rRok + ' <small>cm</small>';
+                    rokSudut2.textContent = thetaRok + '°';
+                    rokLuas2.innerHTML =
+                         luas.toFixed(1) + ' <small>cm²</small>';
+               }
+
+               function updateRok() {
+                    rRok = parseInt(jariRokSlider.value);
+                    thetaRok = parseInt(sudutRokSlider.value);
+                    jariRokLabel.textContent = rRok;
+                    sudutRokLabel.textContent = thetaRok;
+                    drawRok();
+               }
+               jariRokSlider.addEventListener('input', updateRok);
+               sudutRokSlider.addEventListener('input', updateRok);
+               updateRok();
+
+               // ============================================================
+               // 8. PERHITUNGAN KAIN & BIAYA ROK
+               // ============================================================
+               function hitungKainDanBiayaRok() {
+                    const luasPerPanel =
+                         (thetaRok / 360) * (22 / 7) * rRok * rRok;
+                    const busurPerPanel =
+                         (thetaRok / 360) * 2 * (22 / 7) * rRok;
+                    const jumlahPanel =
+                         parseInt(
+                              document.getElementById('jumlahPanel').value
+                         ) || 1;
+                    const hargaKainPerMeter =
+                         parseFloat(
+                              document.getElementById('hargaKainRok').value
+                         ) || 30000;
+
+                    const totalLuasCm2 = luasPerPanel * jumlahPanel;
+                    const totalLuasM2 = totalLuasCm2 / 10000;
+                    const biayaKain = totalLuasM2 * hargaKainPerMeter;
+                    const hargaJual = biayaKain * 1.3;
+
+                    document.getElementById('totalKainRok').innerHTML =
+                         totalLuasCm2.toFixed(1) + ' <small>cm²</small>';
+                    document.getElementById('totalKainM2').innerHTML =
+                         totalLuasM2.toFixed(3) + ' <small>m²</small>';
+                    document.getElementById('biayaKainRok').textContent =
+                         'Rp ' + Math.round(biayaKain).toLocaleString('id-ID');
+                    document.getElementById('hargaJualRok').textContent =
+                         'Rp ' + Math.round(hargaJual).toLocaleString('id-ID');
+               }
+               window.hitungKainDanBiayaRok = hitungKainDanBiayaRok;
+               setTimeout(hitungKainDanBiayaRok, 100);
+
+               // ============================================================
+               // 9. SOAL ROK (2 SOAL)
+               // ============================================================
+               function cekSoalRok1() {
+                    const input = document.getElementById('jawabRok1');
+                    const fb = document.getElementById('feedbackRok1');
+                    const jawaban = parseFloat(input.value);
+                    if (isNaN(jawaban)) {
+                         fb.textContent = 'Masukkan angka!';
+                         fb.className = 'feedback wrong';
+                         return;
+                    }
+                    const benar = 4 * (90 / 360) * (22 / 7) * 70 * 70;
+                    const status = Math.abs(jawaban - benar) < 1;
+                    simpanJawaban('rok1', jawaban);
+                    fb.textContent = status
+                         ? '✅ Benar! Total luas kain = ' +
+                           benar.toFixed(1) +
+                           ' cm².'
+                         : '❌ Coba lagi. Rumus: 4 × (90/360) × 22/7 × 70².';
+                    fb.className = status
+                         ? 'feedback correct'
+                         : 'feedback wrong';
+               }
+               window.cekSoalRok1 = cekSoalRok1;
+
+               function cekSoalRok2() {
+                    const input = document.getElementById('jawabRok2');
+                    const fb = document.getElementById('feedbackRok2');
+                    const jawaban = parseFloat(input.value);
+                    if (isNaN(jawaban)) {
+                         fb.textContent = 'Masukkan angka!';
+                         fb.className = 'feedback wrong';
+                         return;
+                    }
+                    const luas = 4 * (90 / 360) * (22 / 7) * 70 * 70; // cm²
+                    const luasM2 = luas / 10000;
+                    const benar = luasM2 * 25000;
+                    const status = Math.abs(jawaban - benar) < 500;
+                    simpanJawaban('rok2', jawaban);
+                    fb.textContent = status
+                         ? '✅ Benar! Biaya kain = Rp ' +
+                           Math.round(benar).toLocaleString('id-ID') +
+                           '.'
+                         : '❌ Coba lagi. Konversi luas ke m² (1 m² = 10.000 cm²) lalu × harga per meter.';
+                    fb.className = status
+                         ? 'feedback correct'
+                         : 'feedback wrong';
+               }
+               window.cekSoalRok2 = cekSoalRok2;
+
+               // ============================================================
+               // 10. SISTEM JAWABAN & REKAP (total 10 soal)
+               // ============================================================
+               if (!localStorage.getItem('jawabanLingkaran')) {
+                    const defaultJawaban = {
+                         lingkaran: null,
+                         unsur: null,
+                         luas: null,
+                         keliling: null,
+                         unsur2: null,
+                         sudut1: null,
+                         sudut2: null,
+                         juring: null,
+                         rok1: null,
+                         rok2: null,
+                    };
+                    localStorage.setItem(
+                         'jawabanLingkaran',
+                         JSON.stringify(defaultJawaban)
+                    );
+               }
+
+               function simpanJawaban(key, value) {
+                    const data = JSON.parse(
+                         localStorage.getItem('jawabanLingkaran')
+                    );
+                    data[key] = value;
+                    localStorage.setItem(
+                         'jawabanLingkaran',
+                         JSON.stringify(data)
+                    );
+               }
+
+               // SOAL 1: Benda Lingkaran
+               function cekSoalLingkaran() {
+                    const checks = document.querySelectorAll(
+                         '.cek-lingkaran:checked'
+                    );
+                    const values = Array.from(checks).map((c) => c.value);
+                    const benar = ['roda', 'jam', 'piring makan', 'koin'];
+                    const status =
+                         JSON.stringify([...values].sort()) ===
+                         JSON.stringify([...benar].sort());
+                    const fb = document.getElementById('feedbackLingkaran');
+                    simpanJawaban('lingkaran', values.join(', '));
+                    if (status) {
+                         fb.textContent =
+                              '✅ Benar! Roda, jam dinding, piring makan, dan koin logam berbentuk lingkaran.';
+                         fb.className = 'feedback correct';
+                    } else {
+                         const missing = benar.filter(
+                              (b) => !values.includes(b)
+                         );
+                         const extra = values.filter((v) => !benar.includes(v));
+                         let msg = '❌ Coba lagi. ';
+                         if (missing.length > 0)
+                              msg +=
+                                   'Yang belum tercentang: ' +
+                                   missing.join(', ') +
+                                   '. ';
+                         if (extra.length > 0)
+                              msg +=
+                                   'Yang tidak perlu dicentang: ' +
+                                   extra.join(', ') +
+                                   '.';
+                         fb.textContent = msg;
+                         fb.className = 'feedback wrong';
+                    }
+               }
+               window.cekSoalLingkaran = cekSoalLingkaran;
+
+               // SOAL 2: Unsur (diameter)
+               function cekSoalUnsur() {
+                    const select = document.getElementById('jawabUnsur');
+                    const fb = document.getElementById('feedbackUnsur');
+                    const jawaban = select.value;
+                    if (!jawaban) {
+                         fb.textContent = 'Pilih jawaban!';
+                         fb.className = 'feedback wrong';
+                         return;
+                    }
+                    const status = jawaban === 'diameter';
+                    simpanJawaban('unsur', jawaban);
+                    fb.textContent = status
+                         ? '✅ Benar! Diameter adalah garis melalui pusat.'
+                         : '❌ Coba lagi. Garis melalui pusat dan menghubungkan dua titik adalah diameter.';
+                    fb.className = status
+                         ? 'feedback correct'
+                         : 'feedback wrong';
+               }
+               window.cekSoalUnsur = cekSoalUnsur;
+
+               // SOAL 3: Luas
+               function cekSoalLuas() {
+                    const input = document.getElementById('jawabLuas');
+                    const fb = document.getElementById('feedbackLuas');
+                    const jawaban = parseFloat(input.value);
+                    if (isNaN(jawaban)) {
+                         fb.textContent = 'Masukkan angka!';
+                         fb.className = 'feedback wrong';
+                         return;
+                    }
+                    const benar = 616;
+                    const status = Math.abs(jawaban - benar) < 0.5;
+                    simpanJawaban('luas', jawaban);
+                    fb.textContent = status
+                         ? '✅ Benar! Luas = 22/7 × 14 × 14 = 616 cm².'
+                         : '❌ Coba lagi. Rumus: π × r², r = 14.';
+                    fb.className = status
+                         ? 'feedback correct'
+                         : 'feedback wrong';
+               }
+               window.cekSoalLuas = cekSoalLuas;
+
+               // SOAL 4: Keliling
+               function cekSoalKeliling() {
+                    const input = document.getElementById('jawabKeliling');
+                    const fb = document.getElementById('feedbackKeliling');
+                    const jawaban = parseFloat(input.value);
+                    if (isNaN(jawaban)) {
+                         fb.textContent = 'Masukkan angka!';
+                         fb.className = 'feedback wrong';
+                         return;
+                    }
+                    const benar = 62.8;
+                    const status = Math.abs(jawaban - benar) < 0.5;
+                    simpanJawaban('keliling', jawaban);
+                    fb.textContent = status
+                         ? '✅ Benar! Keliling = 3,14 × 20 = 62,8 cm.'
+                         : '❌ Coba lagi. Rumus: π × d, d = 20.';
+                    fb.className = status
+                         ? 'feedback correct'
+                         : 'feedback wrong';
+               }
+               window.cekSoalKeliling = cekSoalKeliling;
+
+               // SOAL 5: Unsur 2 (apotema)
+               function cekSoalUnsur2() {
+                    const select = document.getElementById('jawabUnsur2');
+                    const fb = document.getElementById('feedbackUnsur2');
+                    const jawaban = select.value;
+                    if (!jawaban) {
+                         fb.textContent = 'Pilih jawaban!';
+                         fb.className = 'feedback wrong';
+                         return;
+                    }
+                    const status = jawaban === 'apotema';
+                    simpanJawaban('unsur2', jawaban);
+                    fb.textContent = status
+                         ? '✅ Benar! Apotema adalah garis tegak lurus dari pusat ke tali busur.'
+                         : '❌ Coba lagi. Garis tegak lurus dari pusat ke tali busur adalah apotema.';
+                    fb.className = status
+                         ? 'feedback correct'
+                         : 'feedback wrong';
+               }
+               window.cekSoalUnsur2 = cekSoalUnsur2;
+
+               // SOAL 6: Sudut 1
+               function cekSoalSudut1() {
+                    const input = document.getElementById('jawabSudut1');
+                    const fb = document.getElementById('feedbackSudut1');
+                    const jawaban = parseFloat(input.value);
+                    if (isNaN(jawaban)) {
+                         fb.textContent = 'Masukkan angka!';
+                         fb.className = 'feedback wrong';
+                         return;
+                    }
+                    const benar = 50;
+                    const status = Math.abs(jawaban - benar) < 0.5;
+                    simpanJawaban('sudut1', jawaban);
+                    fb.textContent = status
+                         ? '✅ Benar! ½ × 100° = 50°.'
+                         : '❌ Coba lagi. Sudut keliling = ½ × sudut pusat.';
+                    fb.className = status
+                         ? 'feedback correct'
+                         : 'feedback wrong';
+               }
+               window.cekSoalSudut1 = cekSoalSudut1;
+
+               // SOAL 7: Sudut 2
+               function cekSoalSudut2() {
+                    const input = document.getElementById('jawabSudut2');
+                    const fb = document.getElementById('feedbackSudut2');
+                    const jawaban = parseFloat(input.value);
+                    if (isNaN(jawaban)) {
+                         fb.textContent = 'Masukkan angka!';
+                         fb.className = 'feedback wrong';
+                         return;
+                    }
+                    const benar = 90;
+                    const status = Math.abs(jawaban - benar) < 0.5;
+                    simpanJawaban('sudut2', jawaban);
+                    fb.textContent = status
+                         ? '✅ Benar! 2 × 45° = 90°.'
+                         : '❌ Coba lagi. Sudut pusat = 2 × sudut keliling.';
+                    fb.className = status
+                         ? 'feedback correct'
+                         : 'feedback wrong';
+               }
+               window.cekSoalSudut2 = cekSoalSudut2;
+
+               // SOAL 8: Juring
+               function cekSoalJuring() {
+                    const input = document.getElementById('jawabJuring');
+                    const fb = document.getElementById('feedbackJuring');
+                    const jawaban = parseFloat(input.value);
+                    if (isNaN(jawaban)) {
+                         fb.textContent = 'Masukkan angka!';
+                         fb.className = 'feedback wrong';
+                         return;
+                    }
+                    const benar = 462;
+                    const status = Math.abs(jawaban - benar) < 0.5;
+                    simpanJawaban('juring', jawaban);
+                    fb.textContent = status
+                         ? '✅ Benar! (120/360) × 22/7 × 21 × 21 = 462 cm².'
+                         : '❌ Coba lagi. Rumus: (θ/360) × π × r².';
+                    fb.className = status
+                         ? 'feedback correct'
+                         : 'feedback wrong';
+               }
+               window.cekSoalJuring = cekSoalJuring;
+
+               // SOAL 9 dan 10 sudah didefinisikan di atas (cekSoalRok1 & cekSoalRok2)
+
+               // ============================================================
+               // 11. REKAP SKOR (total 10 soal)
+               // ============================================================
+               const soalList = [
+                    {
+                         key: 'lingkaran',
+                         label: 'Benda Lingkaran',
+                         benar: 'roda, jam, piring makan, koin',
+                         tipe: 'string',
+                    },
+                    {
+                         key: 'unsur',
+                         label: 'Unsur (diameter)',
+                         benar: 'diameter',
+                         tipe: 'string',
+                    },
+                    {
+                         key: 'luas',
+                         label: 'Luas Lingkaran',
+                         benar: 616,
+                         tipe: 'angka',
+                    },
+                    {
+                         key: 'keliling',
+                         label: 'Keliling Lingkaran',
+                         benar: 62.8,
+                         tipe: 'angka',
+                    },
+                    {
+                         key: 'unsur2',
+                         label: 'Unsur (apotema)',
+                         benar: 'apotema',
+                         tipe: 'string',
+                    },
+                    {
+                         key: 'sudut1',
+                         label: 'Sudut Keliling',
+                         benar: 50,
+                         tipe: 'angka',
+                    },
+                    {
+                         key: 'sudut2',
+                         label: 'Sudut Pusat',
+                         benar: 90,
+                         tipe: 'angka',
+                    },
+                    {
+                         key: 'juring',
+                         label: 'Luas Juring',
+                         benar: 462,
+                         tipe: 'angka',
+                    },
+                    {
+                         key: 'rok1',
+                         label: 'Luas Kain Rok',
+                         benar: 15400,
+                         tipe: 'angka',
+                    },
+                    {
+                         key: 'rok2',
+                         label: 'Biaya Kain Rok',
+                         benar: 38500,
+                         tipe: 'angka',
+                    },
+               ];
+
+               function tampilkanRekap() {
+                    const data = JSON.parse(
+                         localStorage.getItem('jawabanLingkaran')
+                    );
+                    const tbody = document.getElementById('rekapBody');
+                    let benar = 0,
+                         html = '';
+                    soalList.forEach((soal, index) => {
+                         const jawabanUser = data[soal.key];
+                         let status = false,
+                              displayJawaban = '-',
+                              displayBenar = '';
+                         if (
+                              jawabanUser !== null &&
+                              jawabanUser !== undefined &&
+                              jawabanUser !== ''
+                         ) {
+                              if (soal.tipe === 'string') {
+                                   displayJawaban = jawabanUser;
+                                   displayBenar = soal.benar;
+                                   if (soal.key === 'lingkaran') {
+                                        const userArr = jawabanUser
+                                             .split(', ')
+                                             .sort();
+                                        const benarArr = soal.benar
+                                             .split(', ')
+                                             .sort();
+                                        status =
+                                             JSON.stringify(userArr) ===
+                                             JSON.stringify(benarArr);
+                                   } else {
+                                        status = jawabanUser === soal.benar;
+                                   }
+                              } else {
+                                   displayJawaban = jawabanUser;
+                                   displayBenar = soal.benar;
+                                   status =
+                                        Math.abs(jawabanUser - soal.benar) <
+                                             0.5 ||
+                                        Math.abs(jawabanUser - soal.benar) <
+                                             500;
+                              }
+                         } else {
+                              displayJawaban = 'Belum dijawab';
+                              displayBenar = soal.benar;
+                         }
+                         if (status) benar++;
+                         const icon = status ? '✅' : '❌';
+                         const statusText = status ? 'Benar' : 'Salah';
+                         html += `<tr><td>${index + 1}</td><td>${soal.label}</td><td>${displayJawaban}</td><td>${displayBenar}</td><td>${icon} ${statusText}</td></tr>`;
+                    });
+                    tbody.innerHTML = html;
+                    document.getElementById('skorTotal').textContent = benar;
+                    document.getElementById('skorMaks').textContent =
+                         soalList.length;
+               }
+
+               // ============================================================
+               // 12. RESET
+               // ============================================================
+               function resetSemua() {
+                    if (confirm('Yakin ingin mereset semua jawaban?')) {
+                         const defaultJawaban = {
+                              lingkaran: null,
+                              unsur: null,
+                              luas: null,
+                              keliling: null,
+                              unsur2: null,
+                              sudut1: null,
+                              sudut2: null,
+                              juring: null,
+                              rok1: null,
+                              rok2: null,
+                         };
+                         localStorage.setItem(
+                              'jawabanLingkaran',
+                              JSON.stringify(defaultJawaban)
+                         );
+                         document
+                              .querySelectorAll('.cek-lingkaran')
+                              .forEach((c) => (c.checked = false));
+                         document
+                              .querySelectorAll('select')
+                              .forEach((s) => (s.value = ''));
+                         document
+                              .querySelectorAll('input[type="number"]')
+                              .forEach((i) => (i.value = ''));
+                         document
+                              .querySelectorAll('.feedback')
+                              .forEach((el) => {
+                                   el.textContent = '';
+                                   el.className = 'feedback';
+                              });
+                         tampilkanRekap();
+                         alert('Semua jawaban telah direset!');
+                    }
+               }
+               window.resetSemua = resetSemua;
+
+               // Inisialisasi rekap
+               tampilkanRekap();
+          </script>
+     </body>
+</html>
